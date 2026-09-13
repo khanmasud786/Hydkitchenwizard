@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Hyd Kitchen Wizard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#D4A24C;--maroon:#7B1E1E;--cream:#FFF8F0;--text:#3D2B1F;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+  h1,h2{font-family:'Playfair Display',serif;color:var(--maroon);}
+
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .login-box{background:#fff;padding:40px 30px;border-radius:20px;box-shadow:0 20px 60px rgba(123,30,30,0.15);width:100%;max-width:400px;text-align:center;}
+  .login-box h1{font-size:1.8rem;margin-bottom:8px;}
+  .login-box p{color:#8B7565;font-size:0.9rem;margin-bottom:24px;}
+
+  input,textarea{width:100%;padding:14px 18px;margin-bottom:12px;border:2px solid #F0E6DA;border-radius:12px;font-size:0.95rem;font-family:inherit;outline:none;background:#fff;}
+  input:focus,textarea:focus{border-color:var(--gold);}
+
+  button{cursor:pointer;font-family:inherit;font-weight:600;border:none;transition:transform .2s;}
+  button:hover{transform:translateY(-1px);}
+  .btn-primary{background:linear-gradient(135deg,var(--gold),#B8862B);color:#fff;padding:14px 30px;border-radius:50px;font-size:1rem;width:100%;}
+  .btn-logout{background:var(--maroon);color:#fff;padding:10px 22px;border-radius:50px;font-size:0.9rem;}
+
+  .dash{padding:24px 5%;max-width:1200px;margin:0 auto;}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+  .header h1{font-size:1.6rem;}
+  .card{background:#fff;padding:24px;border-radius:20px;box-shadow:0 10px 40px rgba(123,30,30,0.08);margin-bottom:20px;}
+  .card h2{font-size:1.3rem;margin-bottom:16px;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .row-full{grid-column:1/-1;}
+
+  .video-list{display:flex;flex-direction:column;gap:10px;max-height:500px;overflow-y:auto;}
+  .video-item{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid #F0E6DA;border-radius:12px;}
+  .video-item img{width:90px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0;}
+  .video-item-info{flex:1;min-width:0;}
+  .video-item-info strong{display:block;font-size:0.9rem;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .video-item-info span{font-size:0.75rem;color:#8B7565;}
+  .btn-del{background:#fee;color:#c00;border:none;padding:8px 12px;border-radius:10px;font-size:1rem;flex-shrink:0;}
+
+  .status{padding:12px;border-radius:10px;margin-bottom:12px;font-size:0.9rem;text-align:center;}
+  .status-ok{background:#e8f5e9;color:#2e7d32;}
+  .status-err{background:#ffebee;color:#c62828;}
+
+  @media(max-width:700px){
+    .row{grid-template-columns:1fr;}
+    .header h1{font-size:1.3rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-wrap">
+  <div class="login-box">
+    <h1>🔐 Admin Login</h1>
+    <p>Hyd Kitchen Wizard Dashboard</p>
+    <input type="email" id="email" placeholder="Email" autocomplete="email">
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+    <div id="loginStatus"></div>
+    <button class="btn-primary" onclick="handleLogin()">Login</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashScreen" class="dash" style="display:none;">
+  <div class="header">
+    <h1>🍳 Admin Dashboard</h1>
+    <button class="btn-logout" onclick="handleLogout()">Logout</button>
+  </div>
+
+  <div class="card">
+    <h2>➕ Naya Video Add Karein</h2>
+    <input type="text" id="videoUrl" placeholder="YouTube Link ya Video ID (e.g. https://youtu.be/AbC123)">
+    <div class="row">
+      <input type="text" id="vTitle" placeholder="Recipe Title (e.g. Mutton Khorma)">
+      <input type="text" id="vCategory" placeholder="Category (Hyderabadi / Dessert)">
+      <input type="text" id="vDuration" placeholder="Duration (e.g. 4 min)">
+      <input type="text" id="vDesc" placeholder="Short description">
+    </div>
+    <div id="addStatus"></div>
+    <button class="btn-primary" onclick="handleAddVideo()">Save Video</button>
+  </div>
+
+  <div class="card">
+    <h2>📹 Saare Videos (<span id="videoCount">0</span>)</h2>
+    <div id="videoList" class="video-list"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://lxqyiokavimwqkvdkIind.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let allVideos = [];
+
+  // Check existing session
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) showDashboard();
+    else showLogin();
+  });
+
+  function showLogin() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashScreen').style.display = 'none';
+  }
+
+  function showDashboard() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashScreen').style.display = 'block';
+    loadVideos();
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const status = document.getElementById('loginStatus');
+
+    if (!email || !password) {
+      status.className = 'status status-err';
+      status.textContent = 'Email aur password dono daalein';
+      return;
+    }
+
+    status.className = 'status';
+    status.textContent = 'Logging in...';
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      status.className = 'status status-err';
+      status.textContent = '❌ ' + error.message;
+    } else {
+      status.className = 'status status-ok';
+      status.textContent = '✅ Login successful!';
+      setTimeout(showDashboard, 500);
+    }
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    location.reload();
+  }
+
+  async function handleAddVideo() {
+    const url = document.getElementById('videoUrl').value.trim();
+    const title = document.getElementById('vTitle').value.trim();
+    const category = document.getElementById('vCategory').value.trim() || 'Recipe';
+    const duration = document.getElementById('vDuration').value.trim();
+    const description = document.getElementById('vDesc').value.trim();
+    const status = document.getElementById('addStatus');
+
+    if (!url || !title) {
+      status.className = 'status status-err';
+      status.textContent = '❌ Video link aur title dono zaroori hain';
+      return;
+    }
+
+    // Extract Video ID from URL
+    const idMatch = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([^&?\/\s]+)/);
+    const videoId = idMatch ? idMatch[1] : url;
+
+    const { error } = await supabase.from('videos').insert([{
+      video_id: videoId,
+      title,
+      category,
+      duration,
+      description
+    }]);
+
+    if (error) {
+      status.className = 'status status-err';
+      status.textContent = '❌ ' + error.message;
+    } else {
+      status.className = 'status status-ok';
+      status.textContent = '✅ Video add ho gaya!';
+      document.getElementById('videoUrl').value = '';
+      document.getElementById('vTitle').value = '';
+      document.getElementById('vCategory').value = '';
+      document.getElementById('vDuration').value = '';
+      document.getElementById('vDesc').value = '';
+      setTimeout(() => status.textContent = '', 3000);
+      loadVideos();
+    }
+  }
+
+  async function loadVideos() {
+    const { data, error } = await supabase
+      .from('videos')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    const list = document.getElementById('videoList');
+    const count = document.getElementById('videoCount');
+
+    if (error) {
+      list.innerHTML = '<div style="color:#c00;">Error: ' + error.message + '</div>';
+      return;
+    }
+
+    allVideos = data || [];
+    count.textContent = allVideos.length;
+
+    if (allVideos.length === 0) {
+      list.innerHTML = '<p style="color:#8B7565;text-align:center;padding:20px;">Abhi koi video nahi. Upar se add karein.</p>';
+      return;
+    }
+
+    list.innerHTML = allVideos.map(v => `
+      <div class="video-item">
+        <img src="https://img.youtube.com/vi/${v.video_id}/mqdefault.jpg" alt="">
+        <div class="video-item-info">
+          <strong>${v.title}</strong>
+          <span>${v.category || 'Recipe'} • ${v.duration || ''}</span>
+        </div>
+        <button class="btn-del" onclick="handleDelete('${v.id}')">🗑️</button>
+      </div>
+    `).join('');
+  }
+
+  async function handleDelete(id) {
+    if (!confirm('Pakka delete karna hai?')) return;
+    const { error } = await supabase.from('videos').delete().eq('id', id);
+    if (error) alert('Error: ' + error.message);
+    else loadVideos();
+  }
+</script>
+
+</body>
+</html>

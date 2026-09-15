@@ -90,19 +90,20 @@ h1 {
         </div>
         <button type="button" class="login-btn" id="loginBtn" onclick="doLogin()">🔐 Login</button>
         <div class="error-msg" id="loginError"></div>
-        <div class="info-box" id="infoBox">✅ Page loaded. Ready to login.</div>
+        <div class="info-box" id="infoBox">⏳ Loading...</div>
     </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ===== CONFIG =====
-var SUPABASE_URL = 'https://lxqyiokavimwqkvdkIind.supabase.co';
+// ============================================
+// SAHI SUPABASE URL
+// ============================================
+var SUPABASE_URL = 'https://lxqyiokavimwqkvdklnd.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
 
 var supabaseClient = null;
 
-// ===== INIT =====
 window.addEventListener('load', function() {
     var infoBox = document.getElementById('infoBox');
     
@@ -117,7 +118,6 @@ window.addEventListener('load', function() {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         infoBox.innerHTML = '✅ Supabase connected. Login karein.';
         
-        // Check if already logged in
         supabaseClient.auth.getSession().then(function(res) {
             if (res.data && res.data.session) {
                 window.location.href = 'admin-dashboard.html';
@@ -130,7 +130,6 @@ window.addEventListener('load', function() {
     }
 });
 
-// ===== LOGIN =====
 async function doLogin() {
     var btn = document.getElementById('loginBtn');
     var errorBox = document.getElementById('loginError');
@@ -174,7 +173,6 @@ async function doLogin() {
         infoBox.innerHTML = '✅ Login successful! Redirecting...';
         btn.textContent = '✅ Success!';
         
-        // Redirect to dashboard
         setTimeout(function() {
             window.location.href = 'admin-dashboard.html';
         }, 500);

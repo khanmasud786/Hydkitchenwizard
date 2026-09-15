@@ -19,7 +19,6 @@
 }
 body { background: var(--darker); color: var(--light); min-height: 100vh; line-height: 1.6; }
 
-/* Header */
 .admin-header {
     background: rgba(8, 8, 18, 0.95);
     backdrop-filter: blur(20px);
@@ -55,10 +54,10 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    font-family: inherit;
 }
 .logout-btn:hover { background: var(--danger); color: white; }
 
-/* Tabs */
 .admin-tabs {
     display: flex;
     gap: 0.5rem;
@@ -86,7 +85,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 .tab-btn:hover { color: var(--primary); background: rgba(255, 107, 53, 0.1); }
 .tab-btn.active { background: var(--gradient); color: white; }
 
-/* Content */
 .admin-content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
@@ -116,7 +114,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 }
 .add-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5); }
 
-/* Stats */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
 .stat-card {
     background: linear-gradient(145deg, #1e1e3a, #16162c);
@@ -137,7 +134,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 }
 .stat-card p { color: #b8b8d1; font-size: 0.9rem; }
 
-/* Table */
 .data-table {
     width: 100%;
     background: linear-gradient(145deg, #1e1e3a, #16162c);
@@ -185,7 +181,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 .empty-state { padding: 3rem; text-align: center; color: var(--gray); }
 .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
 
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -225,7 +220,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 .btn-save { background: var(--gradient); color: white; }
 .btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5); }
 
-/* Form */
 .form-group { margin-bottom: 1.2rem; }
 .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: #c8c8d8; font-weight: 500; }
 .form-group input {
@@ -261,7 +255,7 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 
 <div class="admin-header">
     <div class="admin-header-left">
-        <img src="https://ibb.co/FbBXncPs" alt="Logo">
+        <img src="https://i.ibb.co/FbBXncPs/1000044382.jpg" alt="Logo">
         <h1>Admin Dashboard</h1>
     </div>
     <div class="admin-header-right">
@@ -316,7 +310,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
     </div>
 </div>
 
-<!-- RECIPE MODAL -->
 <div class="modal" id="recipeModal">
     <div class="modal-content">
         <h3 id="recipeModalTitle">Add New Recipe</h3>
@@ -337,7 +330,6 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
     </div>
 </div>
 
-<!-- PLAYLIST MODAL -->
 <div class="modal" id="playlistModal">
     <div class="modal-content">
         <h3 id="playlistModalTitle">Add New Playlist</h3>
@@ -358,15 +350,11 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 </div>
 
 <script>
-// ============================================
-// SAHI SUPABASE URL
-// ============================================
 var SUPABASE_URL = 'https://lxqyiokavimwqkvdklnd.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
 
 var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ===== AUTH CHECK =====
 window.addEventListener('DOMContentLoaded', async function() {
     var res = await supabaseClient.auth.getSession();
     if (!res.data.session) {
@@ -377,13 +365,11 @@ window.addEventListener('DOMContentLoaded', async function() {
     loadAllData();
 });
 
-// ===== LOGOUT =====
 async function logout() {
     await supabaseClient.auth.signOut();
     window.location.href = 'admin.html';
 }
 
-// ===== TABS =====
 function switchTab(tabName, btn) {
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
@@ -396,12 +382,10 @@ function switchTab(tabName, btn) {
     if (tabName === 'settings') loadSettings();
 }
 
-// ===== LOAD ALL =====
 async function loadAllData() {
     await Promise.all([loadStats(), loadRecipes(), loadPlaylists(), loadSubscribers(), loadSettings()]);
 }
 
-// ===== STATS =====
 async function loadStats() {
     var r = await supabaseClient.from('recipes').select('id', { count: 'exact', head: true });
     var p = await supabaseClient.from('playlists').select('id', { count: 'exact', head: true });
@@ -413,7 +397,6 @@ async function loadStats() {
     document.getElementById('statSettings').textContent = st.count || 0;
 }
 
-// ===== RECIPES =====
 async function loadRecipes() {
     var result = await supabaseClient.from('recipes').select('*').order('sort_order', { ascending: true });
     var container = document.getElementById('recipesTable');
@@ -499,7 +482,6 @@ async function deleteRecipe(id) {
     await loadStats();
 }
 
-// ===== PLAYLISTS =====
 async function loadPlaylists() {
     var result = await supabaseClient.from('playlists').select('*').order('sort_order', { ascending: true });
     var container = document.getElementById('playlistsTable');
@@ -581,7 +563,6 @@ async function deletePlaylist(id) {
     await loadStats();
 }
 
-// ===== SUBSCRIBERS =====
 async function loadSubscribers() {
     var result = await supabaseClient.from('subscribers').select('*').order('subscribed_at', { ascending: false });
     var container = document.getElementById('subscribersTable');
@@ -600,7 +581,6 @@ async function loadSubscribers() {
     container.innerHTML = html;
 }
 
-// ===== SETTINGS =====
 async function loadSettings() {
     var result = await supabaseClient.from('settings').select('*').order('id', { ascending: true });
     var container = document.getElementById('settingsTable');
@@ -615,7 +595,7 @@ async function loadSettings() {
     data.forEach(function(s) {
         html += '<tr>';
         html += '<td><strong>' + s.key + '</strong></td>';
-        html += '<td><input type="text" value="' + (s.value || '') + '" id="setting-' + s.id + '" style="background: rgba(15,15,30,0.6); border: 1px solid rgba(255,107,53,0.3); border-radius: 8px; padding: 0.5rem; color: white; width: 100%; max-width: 400px;"></td>';
+        html += '<td><input type="text" value="' + (s.value || '') + '" id="setting-' + s.id + '" style="background: rgba(15,15,30,0.6); border: 1px solid rgba(255,107,53,0.3); border-radius: 8px; padding: 0.5rem; color: white; width: 100%; max-width: 400px; font-family: inherit;"></td>';
         html += '<td><button class="action-btn edit-btn" onclick="saveSetting(' + s.id + ')">💾 Save</button></td>';
         html += '</tr>';
     });
@@ -630,7 +610,6 @@ async function saveSetting(id) {
     alert('✅ Setting saved!');
 }
 
-// ===== MODAL CLOSE =====
 function closeModal(id) {
     document.getElementById(id).classList.remove('active');
 }

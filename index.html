@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Hyd's Kitchen Wizards</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Hyd's Kitchen Wizards - Asli Hyderabadi Recipes</title>
+<meta name="description" content="Hyd's Kitchen Wizards - Asli Hyderabadi aur Indian recipes, cooking tips aur YouTube channel">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; }
 
@@ -13,1080 +13,584 @@
     --secondary: #f7c548;
     --dark: #1a1a2e;
     --darker: #0f0f1e;
-    --card: #1e1e3a;
     --light: #f8f9fa;
     --gray: #6c757d;
     --gradient: linear-gradient(135deg, #ff6b35 0%, #f7c548 100%);
-    --success: #28a745;
-    --danger: #dc3545;
-    --info: #17a2b8;
+    --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --yt-red: #ff0000;
 }
 
-body {
-    background: var(--darker);
-    color: var(--light);
-    min-height: 100vh;
-    line-height: 1.6;
-}
+html { scroll-behavior: smooth; }
+body { background: var(--darker); color: var(--light); overflow-x: hidden; line-height: 1.6; }
 
-/* ===== LOGIN PAGE ===== */
-.login-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+/* ===== NAVBAR ===== */
+nav {
+    position: fixed; top: 0; width: 100%; padding: 0.8rem 5%;
+    background: rgba(15, 15, 30, 0.9);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(255, 107, 53, 0.2); transition: all 0.3s ease;
+}
+.logo {
+    font-size: 1.3rem; font-weight: 800;
+    background: var(--gradient); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; background-clip: text;
+    display: flex; align-items: center; gap: 0.6rem;
+}
+.logo-img {
+    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+    background: white; flex-shrink: 0;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--light); text-decoration: none; font-weight: 500; position: relative; transition: color 0.3s ease; }
+.nav-links a::after {
+    content: ''; position: absolute; bottom: -5px; left: 0;
+    width: 0; height: 2px; background: var(--gradient); transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--primary); }
+.nav-links a:hover::after { width: 100%; }
+.menu-btn { display: none; background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer; }
+
+/* ===== HERO ===== */
+.hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 8rem 5% 4rem; position: relative; overflow: hidden;
     background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
                 radial-gradient(circle at 80% 50%, rgba(247, 197, 72, 0.15) 0%, transparent 50%);
 }
-
-.login-box {
-    background: linear-gradient(145deg, #1e1e3a, #16162c);
-    padding: 3rem 2rem;
-    border-radius: 24px;
-    width: 100%;
-    max-width: 420px;
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+.hero-content { max-width: 1200px; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; z-index: 1; }
+.hero-text h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; }
+.hero-text h1 span {
+    background: var(--gradient); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; background-clip: text;
 }
-
-.login-logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0 auto 1.5rem;
-    display: block;
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
-    background: white;
-}
-
-.login-box h1 {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.login-box p {
-    text-align: center;
-    color: #b8b8d1;
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
-}
-
-.form-group {
-    margin-bottom: 1.2rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: #c8c8d8;
-    font-weight: 500;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.9rem 1.2rem;
-    background: rgba(15, 15, 30, 0.6);
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    border-radius: 12px;
-    color: var(--light);
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-    font-family: inherit;
-}
-
-.form-group input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
-}
-
-.login-btn {
-    width: 100%;
-    padding: 1rem;
-    background: var(--gradient);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 0.5rem;
-}
-
-.login-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
-}
-
-.login-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.error-msg {
-    background: rgba(220, 53, 69, 0.2);
-    color: #ff6b6b;
-    padding: 0.8rem 1rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    margin-top: 1rem;
-    display: none;
-    border-left: 3px solid var(--danger);
-}
-
-.error-msg.show { display: block; }
-
-/* ===== DASHBOARD ===== */
-.dashboard { display: none; min-height: 100vh; }
-.dashboard.active { display: block; }
-.login-container.hidden { display: none; }
-
-.admin-header {
-    background: rgba(8, 8, 18, 0.95);
-    backdrop-filter: blur(20px);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 107, 53, 0.25);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.admin-header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.admin-header-left img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--primary);
-    background: white;
-}
-
-.admin-header-left h1 {
-    font-size: 1.2rem;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.admin-header-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.user-email {
-    color: #b8b8d1;
-    font-size: 0.9rem;
-    display: none;
-}
-
-.logout-btn {
-    padding: 0.6rem 1.2rem;
-    background: rgba(220, 53, 69, 0.2);
-    color: #ff6b6b;
-    border: 1px solid rgba(220, 53, 69, 0.4);
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-    background: var(--danger);
-    color: white;
-}
-
-.admin-tabs {
-    display: flex;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    background: rgba(8, 8, 18, 0.5);
-    border-bottom: 1px solid rgba(255, 107, 53, 0.15);
-    overflow-x: auto;
-    white-space: nowrap;
-}
-
-.admin-tabs::-webkit-scrollbar { height: 4px; }
-.admin-tabs::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-.tab-btn {
-    padding: 0.7rem 1.5rem;
-    background: transparent;
-    color: #b8b8d1;
-    border: 1px solid transparent;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.tab-btn:hover {
-    color: var(--primary);
-    background: rgba(255, 107, 53, 0.1);
-}
-
-.tab-btn.active {
-    background: var(--gradient);
-    color: white;
-    border-color: transparent;
-}
-
-.admin-content {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.panel-header h2 {
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.add-btn {
-    padding: 0.8rem 1.5rem;
-    background: var(--gradient);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-}
-
-.add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5);
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.stat-card {
-    background: linear-gradient(145deg, #1e1e3a, #16162c);
-    padding: 1.5rem;
-    border-radius: 18px;
-    border: 1px solid rgba(255, 107, 53, 0.2);
-    transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--primary);
-    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
-}
-
-.stat-card .stat-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.stat-card h3 {
-    font-size: 2rem;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 800;
-}
-
-.stat-card p {
-    color: #b8b8d1;
-    font-size: 0.9rem;
-}
-
-.data-table {
-    width: 100%;
-    background: linear-gradient(145deg, #1e1e3a, #16162c);
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 107, 53, 0.15);
-}
-
-.data-table table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.data-table th {
-    background: rgba(255, 107, 53, 0.1);
-    color: var(--primary);
-    padding: 1rem;
-    text-align: left;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-}
-
-.data-table td {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 0.9rem;
-    color: #d8d8e8;
-}
-
-.data-table tr:last-child td { border-bottom: none; }
-
-.data-table tr:hover td { background: rgba(255, 107, 53, 0.05); }
-
-.action-btns {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.action-btn {
-    padding: 0.4rem 0.9rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.edit-btn {
-    background: rgba(23, 162, 184, 0.2);
-    color: var(--info);
-    border: 1px solid rgba(23, 162, 184, 0.4);
-}
-
-.edit-btn:hover {
-    background: var(--info);
-    color: white;
-}
-
-.delete-btn {
-    background: rgba(220, 53, 69, 0.2);
-    color: #ff6b6b;
-    border: 1px solid rgba(220, 53, 69, 0.4);
-}
-
-.delete-btn:hover {
-    background: var(--danger);
-    color: white;
-}
-
-.empty-state {
-    padding: 3rem;
-    text-align: center;
-    color: var(--gray);
-}
-
-.empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    overflow-y: auto;
-}
-
-.modal.active { display: flex; }
-
-.modal-content {
-    background: linear-gradient(145deg, #1e1e3a, #16162c);
-    border-radius: 24px;
-    padding: 2rem;
-    width: 100%;
-    max-width: 600px;
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    max-height: 90vh;
-    overflow-y: auto;
-    margin: auto;
-}
-
-.modal-content h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.modal-btns {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-}
-
+.hero-text p { font-size: 1.1rem; color: #b8b8d1; margin-bottom: 2rem; max-width: 520px; }
+.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
 .btn {
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+    padding: 0.9rem 2rem; border-radius: 50px; font-weight: 600; font-size: 1rem;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+    cursor: pointer; border: none; transition: all 0.3s ease; white-space: nowrap;
+}
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6); }
+.btn-outline { background: transparent; color: var(--light); border: 2px solid var(--primary); }
+.btn-outline:hover { background: var(--primary); transform: translateY(-3px); }
+
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.chef-plate {
+    width: 420px; height: 420px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; animation: float 6s ease-in-out infinite;
+}
+.chef-logo-img {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    box-shadow: 0 0 80px rgba(255, 107, 53, 0.6);
+    border: 4px solid rgba(255, 107, 53, 0.3); background: white;
+}
+.chef-plate::before {
+    content: ''; position: absolute; inset: -25px; border-radius: 50%;
+    border: 2px dashed rgba(255, 107, 53, 0.5); animation: rotate 20s linear infinite;
+}
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ===== SECTIONS ===== */
+section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
+.section-title { text-align: center; margin-bottom: 3rem; }
+.section-title h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 1rem; }
+.section-title h2 span {
+    background: var(--gradient); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-title p { color: #b8b8d1; font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+
+/* ===== PLAYLIST ===== */
+.playlists-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.playlist-card {
+    background: linear-gradient(145deg, #1e1e3a, #16162c);
+    border-radius: 20px; overflow: hidden; transition: all 0.4s ease;
+    border: 1px solid rgba(255, 107, 53, 0.15);
+    text-decoration: none; color: var(--light);
+    display: flex; flex-direction: column; position: relative;
+}
+.playlist-card:hover {
+    transform: translateY(-10px); border-color: var(--primary);
+    box-shadow: 0 25px 50px rgba(255, 107, 53, 0.35);
+}
+.playlist-thumb {
+    height: 180px; background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative; overflow: hidden;
+}
+.playlist-thumb::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 30, 0.9) 100%);
+}
+.playlist-overlay {
+    position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s ease; z-index: 3;
+}
+.playlist-card:hover .playlist-overlay { opacity: 1; }
+.playlist-play-icon {
+    width: 65px; height: 65px; background: var(--yt-red); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; color: white;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
+    transform: scale(0.8); transition: transform 0.3s ease;
+}
+.playlist-card:hover .playlist-play-icon { transform: scale(1); }
+.playlist-count {
+    position: absolute; bottom: 1rem; right: 1rem;
+    background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+    padding: 0.35rem 0.9rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 600; z-index: 4;
+}
+.playlist-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+.playlist-info h3 { font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700; line-height: 1.3; }
+.playlist-info p { color: #b8b8d1; font-size: 0.9rem; margin-bottom: 1rem; flex: 1; }
+.playlist-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(255, 107, 53, 0.15); color: var(--primary);
+    padding: 0.3rem 0.8rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 600; width: fit-content;
 }
 
-.btn-cancel {
-    background: rgba(108, 117, 125, 0.2);
-    color: #b8b8d1;
-    border: 1px solid rgba(108, 117, 125, 0.4);
+/* ===== RECIPES ===== */
+.recipes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.recipe-card {
+    background: linear-gradient(145deg, #1e1e3a, #16162c);
+    border-radius: 20px; overflow: hidden; transition: all 0.4s ease;
+    border: 1px solid rgba(255, 107, 53, 0.1);
+    display: flex; flex-direction: column;
+}
+.recipe-card:hover {
+    transform: translateY(-10px); border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+}
+.recipe-image {
+    height: 180px; background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4.5rem; position: relative; overflow: hidden;
+}
+.recipe-image::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 30, 0.85) 100%);
+}
+.recipe-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
+    padding: 0.4rem 1rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 600; z-index: 2;
+}
+.recipe-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+.recipe-info h3 { font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700; }
+.recipe-info p { color: #b8b8d1; font-size: 0.9rem; margin-bottom: 1rem; flex: 1; }
+.recipe-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.83rem; color: var(--gray);
+    padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 1rem;
+}
+.watch-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--yt-red); color: white; padding: 0.75rem 1.2rem;
+    border-radius: 50px; text-decoration: none; font-weight: 600;
+    font-size: 0.88rem; transition: all 0.3s ease; width: 100%;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+}
+.watch-btn:hover {
+    background: #cc0000; transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.5);
 }
 
-.btn-cancel:hover { background: var(--gray); color: white; }
+/* ===== CHANNEL PROMO ===== */
+.channel-promo {
+    background: var(--gradient-dark); border-radius: 30px;
+    padding: 4rem 3rem; text-align: center; position: relative;
+    overflow: hidden; margin-top: 3rem; border: 1px solid rgba(255, 107, 53, 0.2);
+}
+.channel-promo::before {
+    content: ''; position: absolute; top: -50%; right: -50%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255, 107, 53, 0.2) 0%, transparent 70%);
+    border-radius: 50%; animation: float 8s ease-in-out infinite;
+}
+.channel-promo::after {
+    content: ''; position: absolute; bottom: -50%; left: -50%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(247, 197, 72, 0.2) 0%, transparent 70%);
+    border-radius: 50%; animation: float 8s ease-in-out infinite reverse;
+}
+.promo-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.promo-logo {
+    width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+    margin: 0 auto 1.5rem; display: block;
+    border: 3px solid var(--primary);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); background: white;
+}
+.promo-content h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 1rem; }
+.promo-content p { color: #b8b8d1; font-size: 1.05rem; margin-bottom: 2rem; }
+.yt-btn {
+    background: var(--yt-red); color: white; padding: 1rem 2.5rem; border-radius: 50px;
+    font-weight: 700; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 0.7rem; font-size: 1.05rem;
+    transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+}
+.yt-btn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6); }
+.subscriber-count { display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat h3 {
+    font-size: 2rem; background: var(--gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; font-weight: 800;
+}
+.stat p { color: var(--gray); font-size: 0.88rem; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
 
-.btn-save {
-    background: var(--gradient);
-    color: white;
+/* ===== TIPS ===== */
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+.tip-card {
+    background: linear-gradient(145deg, #1e1e3a, #16162c);
+    padding: 2rem; border-radius: 20px; text-align: center;
+    transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.tip-card:hover {
+    transform: translateY(-5px); border-color: var(--secondary);
+    box-shadow: 0 15px 30px rgba(247, 197, 72, 0.2);
+}
+.tip-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+.tip-card h3 { margin-bottom: 0.7rem; color: var(--secondary); }
+.tip-card p { color: #b8b8d1; font-size: 0.93rem; }
+
+/* ===== FOOTER ===== */
+footer {
+    background: var(--darker); padding: 3rem 5% 2rem;
+    border-top: 1px solid rgba(255, 107, 53, 0.1); margin-top: 4rem;
+}
+.footer-content {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem; margin-bottom: 2rem;
+}
+.footer-col h4 { margin-bottom: 1rem; color: var(--primary); }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 0.5rem; }
+.footer-col ul a { color: #b8b8d1; text-decoration: none; transition: color 0.3s ease; }
+.footer-col ul a:hover { color: var(--primary); }
+.footer-logo {
+    width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--primary); background: white; margin-bottom: 0.8rem;
+}
+.social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+.social-links a {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255, 107, 53, 0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--light); text-decoration: none;
+    transition: all 0.3s ease; font-size: 1.2rem;
+}
+.social-links a:hover { background: var(--gradient); transform: translateY(-3px); }
+.footer-bottom {
+    text-align: center; padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--gray); font-size: 0.88rem;
 }
 
-.btn-save:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5);
+/* ===== ANIMATION ===== */
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .hero-content { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+    .hero-text p { margin: 0 auto 2rem; }
+    .hero-buttons { justify-content: center; }
+    .chef-plate { width: 300px; height: 300px; }
+    .logo-img { width: 40px; height: 40px; }
+    .logo { font-size: 1.05rem; }
+    .nav-links {
+        position: fixed; top: 70px; right: -100%; flex-direction: column;
+        background: rgba(15, 15, 30, 0.98); width: 250px;
+        height: calc(100vh - 70px); padding: 2rem;
+        transition: right 0.4s ease; border-left: 1px solid rgba(255, 107, 53, 0.2);
+    }
+    .nav-links.active { right: 0; }
+    .menu-btn { display: block; }
+    .channel-promo { padding: 3rem 1.5rem; }
+    .subscriber-count { gap: 1.5rem; }
+    .promo-logo { width: 85px; height: 85px; }
 }
-
-.loading {
-    text-align: center;
-    padding: 3rem;
-    color: var(--primary);
-}
-
-.spinner {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 107, 53, 0.3);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-@media (max-width: 768px) {
-    .admin-header { padding: 1rem; }
-    .admin-content { padding: 1rem; }
-    .admin-tabs { padding: 1rem; }
-    .panel-header h2 { font-size: 1.2rem; }
-    .data-table { overflow-x: auto; display: block; }
-    .data-table table { min-width: 600px; }
-    .modal-content { padding: 1.5rem; }
-    .login-box { padding: 2rem 1.5rem; }
+@media (max-width: 500px) {
+    .hero { padding: 7rem 4% 3rem; }
+    .btn { padding: 0.8rem 1.5rem; font-size: 0.95rem; }
+    section { padding: 3rem 4%; }
+    .chef-plate { width: 240px; height: 240px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN PAGE ===== -->
-<div class="login-container" id="loginContainer">
-    <div class="login-box">
-        <img src="https://i.ibb.co/bMg7cZsJ/Screenshot-20260913-092657-Instagram.jpg" alt="Logo" class="login-logo">
-        <h1>Admin Login</h1>
-        <p>Hyd's Kitchen Wizards Dashboard</p>
-        <form id="loginForm">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="loginEmail" placeholder="admin@example.com" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="login-btn" id="loginBtn">🔐 Login</button>
-            <div class="error-msg" id="loginError"></div>
-        </form>
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+    <div class="logo">
+        <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Hyd's Kitchen Wizards Logo" class="logo-img">
+        <span>Hyd's Kitchen Wizards</span>
     </div>
-</div>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#playlists">Playlists</a></li>
+        <li><a href="#recipes">Recipes</a></li>
+        <li><a href="#tips">Tips</a></li>
+        <li><a href="#channel">Channel</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn">☰</button>
+</nav>
 
-<!-- ===== DASHBOARD ===== -->
-<div class="dashboard" id="dashboard">
-    <div class="admin-header">
-        <div class="admin-header-left">
-            <img src="https://i.ibb.co/bMg7cZsJ/Screenshot-20260913-092657-Instagram.jpg" alt="Logo">
-            <h1>Admin Dashboard</h1>
-        </div>
-        <div class="admin-header-right">
-            <span class="user-email" id="userEmail"></span>
-            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
-        </div>
-    </div>
-
-    <div class="admin-tabs">
-        <button class="tab-btn active" onclick="switchTab('overview', this)">📊 Overview</button>
-        <button class="tab-btn" onclick="switchTab('recipes', this)">🍽️ Recipes</button>
-        <button class="tab-btn" onclick="switchTab('playlists', this)">🎬 Playlists</button>
-        <button class="tab-btn" onclick="switchTab('subscribers', this)">📩 Subscribers</button>
-        <button class="tab-btn" onclick="switchTab('settings', this)">⚙️ Settings</button>
-    </div>
-
-    <div class="admin-content">
-
-        <div class="tab-panel active" id="panel-overview">
-            <div class="panel-header">
-                <h2>📊 Dashboard Overview</h2>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">🍽️</div>
-                    <h3 id="statRecipes">0</h3>
-                    <p>Total Recipes</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🎬</div>
-                    <h3 id="statPlaylists">0</h3>
-                    <p>Total Playlists</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📩</div>
-                    <h3 id="statSubscribers">0</h3>
-                    <p>Subscribers</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⚙️</div>
-                    <h3 id="statSettings">0</h3>
-                    <p>Settings</p>
-                </div>
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Asli <span>Hyderabadi</span> Swaad, Ghar Par 🍳</h1>
+            <p>Assalamu Alaikum! Welcome to Hyd's Kitchen Wizards — aapka apna destination for authentic Hyderabadi aur Indian recipes. Sikhiye, banao aur maze karo!</p>
+            <div class="hero-buttons">
+                <a href="#playlists" class="btn btn-primary">📺 Playlists Dekhein</a>
+                <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" class="btn btn-outline">▶️ Channel Dekhein</a>
             </div>
         </div>
-
-        <div class="tab-panel" id="panel-recipes">
-            <div class="panel-header">
-                <h2>🍽️ Manage Recipes</h2>
-                <button class="add-btn" onclick="openRecipeModal()">➕ Add Recipe</button>
-            </div>
-            <div class="data-table" id="recipesTable">
-                <div class="loading"><div class="spinner"></div></div>
-            </div>
-        </div>
-
-        <div class="tab-panel" id="panel-playlists">
-            <div class="panel-header">
-                <h2>🎬 Manage Playlists</h2>
-                <button class="add-btn" onclick="openPlaylistModal()">➕ Add Playlist</button>
-            </div>
-            <div class="data-table" id="playlistsTable">
-                <div class="loading"><div class="spinner"></div></div>
-            </div>
-        </div>
-
-        <div class="tab-panel" id="panel-subscribers">
-            <div class="panel-header">
-                <h2>📩 Newsletter Subscribers</h2>
-            </div>
-            <div class="data-table" id="subscribersTable">
-                <div class="loading"><div class="spinner"></div></div>
-            </div>
-        </div>
-
-        <div class="tab-panel" id="panel-settings">
-            <div class="panel-header">
-                <h2>⚙️ Website Settings</h2>
-            </div>
-            <div class="data-table" id="settingsTable">
-                <div class="loading"><div class="spinner"></div></div>
+        <div class="hero-visual">
+            <div class="chef-plate">
+                <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Kitchen Wizard" class="chef-logo-img">
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- ===== RECIPE MODAL ===== -->
-<div class="modal" id="recipeModal">
-    <div class="modal-content">
-        <h3 id="recipeModalTitle">Add New Recipe</h3>
-        <form id="recipeForm">
-            <input type="hidden" id="recipeId">
-            <div class="form-group">
-                <label>Emoji</label>
-                <input type="text" id="recipeEmoji" placeholder="🍛" maxlength="5">
-            </div>
-            <div class="form-group">
-                <label>Recipe Name *</label>
-                <input type="text" id="recipeName" placeholder="Hyderabadi Biryani" required>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <input type="text" id="recipeDesc" placeholder="Short description">
-            </div>
-            <div class="form-group">
-                <label>Badge</label>
-                <input type="text" id="recipeBadge" placeholder="🔥 Trending">
-            </div>
-            <div class="form-group">
-                <label>Time</label>
-                <input type="text" id="recipeTime" placeholder="60 min">
-            </div>
-            <div class="form-group">
-                <label>Rating</label>
-                <input type="text" id="recipeRating" placeholder="4.9">
-            </div>
-            <div class="form-group">
-                <label>YouTube Search Query *</label>
-                <input type="text" id="recipeQuery" placeholder="hyderabadi chicken biryani" required>
-            </div>
-            <div class="modal-btns">
-                <button type="button" class="btn btn-cancel" onclick="closeModal('recipeModal')">Cancel</button>
-                <button type="submit" class="btn btn-save">💾 Save</button>
-            </div>
-        </form>
+<!-- ===== PLAYLISTS ===== -->
+<section id="playlists">
+    <div class="section-title reveal">
+        <h2>Channel <span>Playlists</span></h2>
+        <p>Category-wise saari recipes — ek click par poori playlist dekhein! 🎬</p>
     </div>
-</div>
+    <div class="playlists-grid" id="playlistsGrid"></div>
+</section>
 
-<!-- ===== PLAYLIST MODAL ===== -->
-<div class="modal" id="playlistModal">
-    <div class="modal-content">
-        <h3 id="playlistModalTitle">Add New Playlist</h3>
-        <form id="playlistForm">
-            <input type="hidden" id="playlistId">
-            <div class="form-group">
-                <label>Emoji</label>
-                <input type="text" id="playlistEmoji" placeholder="🍛" maxlength="5">
-            </div>
-            <div class="form-group">
-                <label>Playlist Name *</label>
-                <input type="text" id="playlistName" placeholder="Biryani Recipes" required>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <input type="text" id="playlistDesc" placeholder="Short description">
-            </div>
-            <div class="form-group">
-                <label>YouTube Playlist URL *</label>
-                <input type="url" id="playlistUrl" placeholder="https://youtube.com/playlist?list=..." required>
-            </div>
-            <div class="form-group">
-                <label>Badge</label>
-                <input type="text" id="playlistBadge" placeholder="🍛 Biryani">
-            </div>
-            <div class="form-group">
-                <label>Count Label</label>
-                <input type="text" id="playlistCount" placeholder="Biryani Collection">
-            </div>
-            <div class="modal-btns">
-                <button type="button" class="btn btn-cancel" onclick="closeModal('playlistModal')">Cancel</button>
-                <button type="submit" class="btn btn-save">💾 Save</button>
-            </div>
-        </form>
+<!-- ===== RECIPES ===== -->
+<section id="recipes">
+    <div class="section-title reveal">
+        <h2>Hamari <span>Famous Recipes</span></h2>
+        <p>Recipe par click karein — YouTube par uski video turant khul jayegi!</p>
     </div>
-</div>
+    <div class="recipes-grid" id="recipesGrid"></div>
+</section>
+
+<!-- ===== CHANNEL PROMO ===== -->
+<section id="channel">
+    <div class="channel-promo reveal">
+        <div class="promo-content">
+            <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Kitchen Wizard Logo" class="promo-logo">
+            <h2>🎬 Subscribe Karein Hyd's Kitchen Wizards</h2>
+            <p>Har hafte naye authentic Hyderabadi aur Indian recipe videos, cooking hacks aur kitchen wizardry tips. Hamare food lover family ka hissa baniye!</p>
+            <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" class="yt-btn">
+                ▶️ YouTube Par Subscribe Karein
+            </a>
+            <div class="subscriber-count">
+                <div class="stat"><h3>2.75K+</h3><p>Subscribers</p></div>
+                <div class="stat"><h3>900+</h3><p>Videos</p></div>
+                <div class="stat"><h3>500K+</h3><p>Views</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TIPS ===== -->
+<section id="tips">
+    <div class="section-title reveal">
+        <h2>Cooking <span>Wizardry Tips</span></h2>
+        <p>In tips se aap bhi ban sakte hain kitchen ke ustad!</p>
+    </div>
+    <div class="tips-grid">
+        <div class="tip-card reveal">
+            <span class="tip-icon">🧂</span>
+            <h3>Perfect Masala</h3>
+            <p>Authentic Hyderabadi swaad ke liye masalon ka sahi balance sikhiye.</p>
+        </div>
+        <div class="tip-card reveal">
+            <span class="tip-icon">🔥</span>
+            <h3>Dum Cooking</h3>
+            <p>Biryani ke liye slow-cooking dum technique ko master karein.</p>
+        </div>
+        <div class="tip-card reveal">
+            <span class="tip-icon">⏰</span>
+            <h3>Timing Zaroori Hai</h3>
+            <p>Har lazeez dish ke peeche perfect timing ka raaz hota hai.</p>
+        </div>
+        <div class="tip-card reveal">
+            <span class="tip-icon">🥄</span>
+            <h3>Fresh Ingredients</h3>
+            <p>Behtar swaad aur khushbu ke liye hamesha fresh ingredients use karein.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-col">
+            <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Hyd's Kitchen Wizards" class="footer-logo">
+            <div class="logo" style="margin-bottom:1rem;font-size:1.15rem;">Hyd's Kitchen Wizards</div>
+            <p style="color:#b8b8d1;font-size:0.93rem;">Authentic Hyderabadi aur Indian recipes. Cooking magic, ek recipe at a time!</p>
+            <div class="social-links">
+                <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" title="YouTube">▶️</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="Facebook">📘</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#playlists">Playlists</a></li>
+                <li><a href="#recipes">Recipes</a></li>
+                <li><a href="#channel">Channel</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Categories</h4>
+            <ul>
+                <li><a href="#playlists">Iftar Special</a></li>
+                <li><a href="#playlists">Biryani</a></li>
+                <li><a href="#playlists">Mutton</a></li>
+                <li><a href="#playlists">Breakfast</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="#">📧 info@hydskitchenwizards.com</a></li>
+                <li><a href="#">📍 Hyderabad, India</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2025 Hyd's Kitchen Wizards. All rights reserved. Banaya gaya ❤️ se food lovers ke liye.
+    </div>
+</footer>
 
 <script>
-// ===== SUPABASE SETUP (SAHI URL) =====
-const SUPABASE_URL = 'https://lxqyiokavimwqkvdkIind.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
+// ===== CONFIG =====
+const CHANNEL_URL = 'https://youtube.com/@hyds-kitchenwizards-v6u';
+const SUBSCRIBE_URL = 'https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ===== PLAYLISTS DATA (10 Total) =====
+const playlists = [
+    { emoji: '🌙', name: 'Hyderabadi Famous Iftar Recipe', desc: 'Ramzan ke liye khaas Hyderabadi iftar recipes — haleem, samosa, fruit chaat aur bahut kuch!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1GKkFoxJa_UnsUtN3g144o2&si=yar-NbnRzWemLMzj', badge: '🌙 Iftar Special', count: 'Ramzan Special' },
+    { emoji: '🍛', name: 'All Types Biryani', desc: 'Chicken, mutton, veg, egg — har tarah ki biryani ek hi jagah!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1HY72dKrliNxFGIfe174KKk&si=gLqPD3uvAFQEPvL7', badge: '🍛 Biryani', count: 'Biryani Collection' },
+    { emoji: '🥩', name: 'Mutton Recipe', desc: 'Authentic mutton recipes — korma, haleem, biryani aur bahut kuch!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1EFBIt7yY8qv3dq_OSXJS_B&si=uDkOouEZEtHc-ZaD', badge: '🥩 Mutton', count: 'Mutton Lovers' },
+    { emoji: '🪔', name: 'Diwali Special Sweet & Namkeen', desc: 'Diwali ke liye mithai aur namkeen recipes — ghar par banayein!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1GS2crAiKnL45PDazvHnwnE&si=AJwzBb9bSU-LYQTS', badge: '🪔 Diwali Special', count: 'Festival Special' },
+    { emoji: '🥪', name: 'Sandwich Recipe', desc: 'Quick aur tasty sandwich recipes — breakfast aur snacks ke liye perfect!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1G-Ys1wvNi7-AVHRd-fLYmv&si=_p6zIXATzZMIO2W-', badge: '🥪 Sandwich', count: 'Quick Recipes' },
+    { emoji: '🍳', name: 'Quick Breakfast Recipe', desc: 'Subah ke liye quick aur tasty breakfast recipes — 10 minute mein ready!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1F5CycIPR82D1SeegWMs3x8&si=QRQ840fBqz3nVf16', badge: '🍳 Breakfast', count: '39 Videos' },
+    { emoji: '🍽️', name: 'Hyderabadi Lunch/Dinner Combo', desc: 'Hyderabadi lunch aur dinner ke liye perfect combo recipes!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1FnQhdM6Jw2OaMrYH_jbTL6&si=xDJ7inCmMxnvRS9x', badge: '🍽️ Lunch/Dinner', count: 'Combo Meals' },
+    { emoji: '🍮', name: 'Dessert Recipe Hyderabadi', desc: 'Hyderabadi style desserts aur mithaiyan — ghar par banayein!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1Gi3cApnFDVl7mUYAl4TXo0&si=epeORPxdg6cPTsU3', badge: '🍮 Dessert', count: 'Sweet Treats' },
+    { emoji: '🌅', name: 'Sehri Recipe', desc: 'Sehri ke liye khaas recipes — Ramzan mein energy ke liye perfect!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1H0A8eASKfjW1IRrskc1sOp&si=KW76EDn4U0mBKQby', badge: '🌅 Sehri Special', count: 'Ramzan Sehri' },
+    { emoji: '🧅', name: 'No Onion No Ginger Breakfast', desc: 'Bina pyaaz aur adrak ke healthy breakfast recipes — sabke liye!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1G-a-XkfiERwQMt4sSYtaVY&si=Q5Ap31buBGQaseYC', badge: '🧅 No Onion/Ginger', count: 'Healthy' }
+];
 
-// ===== AUTH CHECK =====
-window.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        showDashboard(session.user.email);
-    }
+// ===== RECIPES DATA =====
+const recipes = [
+    { emoji: '🍛', name: 'Hyderabadi Chicken Biryani', desc: 'Asli dum biryani with aromatic spices, saffron aur tender chicken.', badge: '🔥 Trending', time: '60 min', rating: '4.9', query: 'hyderabadi chicken biryani' },
+    { emoji: '🍜', name: 'Hyderabadi Mutton Haleem', desc: 'Traditional rich aur creamy haleem — Ramzan ka khaas pakwan.', badge: '⚡ Special', time: '90 min', rating: '4.8', query: 'mutton haleem' },
+    { emoji: '🍗', name: 'Chicken 65', desc: 'Crispy, spicy aur deep-fried South Indian chicken starter.', badge: '🔥 Spicy', time: '30 min', rating: '4.9', query: 'chicken 65' },
+    { emoji: '🥘', name: 'Butter Chicken', desc: 'Creamy, rich aur delicious North Indian butter chicken recipe.', badge: '🍛 Curry', time: '45 min', rating: '4.9', query: 'butter chicken' },
+    { emoji: '🍢', name: 'Paneer Tikka', desc: 'Smoky grilled paneer with perfect blend of Indian spices.', badge: '💚 Veg', time: '30 min', rating: '4.7', query: 'paneer tikka' },
+    { emoji: '🍰', name: 'Double Ka Meetha', desc: 'Classic Hyderabadi bread pudding dessert with dry fruits aur saffron.', badge: '🍮 Sweet', time: '40 min', rating: '4.8', query: 'double ka meetha' },
+    { emoji: '🍚', name: 'Bagara Rice', desc: 'Fragrant Hyderabadi bagara rice cooked with whole spices.', badge: '🍲 Rice', time: '35 min', rating: '4.7', query: 'bagara rice' },
+    { emoji: '🥩', name: 'Mutton Korma', desc: 'Rich aur aromatic Hyderabadi mutton korma with yogurt aur spices.', badge: '🔥 Special', time: '60 min', rating: '4.8', query: 'mutton korma' },
+    { emoji: '🍤', name: 'Prawn Masala', desc: 'Spicy aur tangy prawn masala with South Indian flavors.', badge: '🍤 Seafood', time: '25 min', rating: '4.6', query: 'prawn masala' },
+    { emoji: '🫓', name: 'Hyderabadi Paratha', desc: 'Flaky, layered paratha perfect for breakfast with curry.', badge: '🌅 Breakfast', time: '20 min', rating: '4.7', query: 'hyderabadi paratha' },
+    { emoji: '🍮', name: 'Qubani Ka Meetha', desc: 'Traditional Hyderabadi apricot dessert served with cream.', badge: '🍮 Dessert', time: '30 min', rating: '4.9', query: 'qubani ka meetha' },
+    { emoji: '🍖', name: 'Chicken Tikka', desc: 'Juicy aur smoky chicken tikka marinated in yogurt aur spices.', badge: '🔥 Kabab', time: '40 min', rating: '4.8', query: 'chicken tikka' },
+];
+
+// ===== RENDER PLAYLISTS =====
+function renderPlaylists() {
+    document.getElementById('playlistsGrid').innerHTML = playlists.map(p => `
+        <a href="${p.url}" target="_blank" class="playlist-card reveal">
+            <div class="playlist-thumb">
+                ${p.emoji}
+                <span class="playlist-count">📺 ${p.count}</span>
+                <div class="playlist-overlay">
+                    <div class="playlist-play-icon">▶</div>
+                </div>
+            </div>
+            <div class="playlist-info">
+                <h3>${p.name}</h3>
+                <p>${p.desc}</p>
+                <span class="playlist-badge">${p.badge}</span>
+            </div>
+        </a>
+    `).join('');
+}
+
+// ===== RENDER RECIPES =====
+function renderRecipes() {
+    document.getElementById('recipesGrid').innerHTML = recipes.map(r => `
+        <div class="recipe-card reveal">
+            <div class="recipe-image">${r.emoji}<span class="recipe-badge">${r.badge}</span></div>
+            <div class="recipe-info">
+                <h3>${r.name}</h3>
+                <p>${r.desc}</p>
+                <div class="recipe-meta">
+                    <span>⏱️ ${r.time}</span>
+                    <span>⭐ ${r.rating}</span>
+                </div>
+                <a href="${CHANNEL_URL}/search?query=${encodeURIComponent(r.query)}"
+                   target="_blank" class="watch-btn">▶ Watch Video</a>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===== MOBILE MENU =====
+const menuBtn = document.getElementById('menuBtn');
+const navLinks = document.getElementById('navLinks');
+menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
 });
-
-// ===== LOGIN =====
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('loginBtn');
-    const errorBox = document.getElementById('loginError');
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    
-    btn.disabled = true;
-    btn.textContent = '⏳ Logging in...';
-    errorBox.classList.remove('show');
-    
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    
-    if (error) {
-        errorBox.textContent = '❌ ' + error.message;
-        errorBox.classList.add('show');
-        btn.disabled = false;
-        btn.textContent = '🔐 Login';
-        return;
-    }
-    
-    showDashboard(data.user.email);
-});
-
-// ===== SHOW DASHBOARD =====
-async function showDashboard(email) {
-    document.getElementById('loginContainer').classList.add('hidden');
-    document.getElementById('dashboard').classList.add('active');
-    document.getElementById('userEmail').textContent = email;
-    document.getElementById('userEmail').style.display = 'inline';
-    await loadAllData();
-}
-
-// ===== LOGOUT =====
-async function logout() {
-    await supabase.auth.signOut();
-    location.reload();
-}
-
-// ===== TAB SWITCHING =====
-function switchTab(tabName, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('panel-' + tabName).classList.add('active');
-    
-    if (tabName === 'recipes') loadRecipes();
-    if (tabName === 'playlists') loadPlaylists();
-    if (tabName === 'subscribers') loadSubscribers();
-    if (tabName === 'settings') loadSettings();
-}
-
-// ===== LOAD ALL DATA =====
-async function loadAllData() {
-    await Promise.all([loadStats(), loadRecipes(), loadPlaylists(), loadSubscribers(), loadSettings()]);
-}
-
-// ===== STATS =====
-async function loadStats() {
-    const [r, p, s, st] = await Promise.all([
-        supabase.from('recipes').select('id', { count: 'exact', head: true }),
-        supabase.from('playlists').select('id', { count: 'exact', head: true }),
-        supabase.from('subscribers').select('id', { count: 'exact', head: true }),
-        supabase.from('settings').select('id', { count: 'exact', head: true })
-    ]);
-    document.getElementById('statRecipes').textContent = r.count || 0;
-    document.getElementById('statPlaylists').textContent = p.count || 0;
-    document.getElementById('statSubscribers').textContent = s.count || 0;
-    document.getElementById('statSettings').textContent = st.count || 0;
-}
-
-// ===== RECIPES =====
-async function loadRecipes() {
-    const { data, error } = await supabase.from('recipes').select('*').order('sort_order', { ascending: true });
-    const container = document.getElementById('recipesTable');
-    
-    if (error || !data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="icon">🍽️</div><p>No recipes yet. Click "Add Recipe" to start!</p></div>';
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Emoji</th>
-                    <th>Name</th>
-                    <th>Badge</th>
-                    <th>Time</th>
-                    <th>Rating</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${data.map(r => `
-                    <tr>
-                        <td style="font-size:1.5rem;">${r.emoji || '🍽️'}</td>
-                        <td><strong>${r.name}</strong></td>
-                        <td>${r.badge || '-'}</td>
-                        <td>${r.time || '-'}</td>
-                        <td>⭐ ${r.rating || '-'}</td>
-                        <td>
-                            <div class="action-btns">
-                                <button class="action-btn edit-btn" onclick='editRecipe(${JSON.stringify(r).replace(/'/g, "&#39;")})'>✏️ Edit</button>
-                                <button class="action-btn delete-btn" onclick="deleteRecipe(${r.id}, '${r.name.replace(/'/g, "\\'")}')">🗑️ Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-function openRecipeModal(recipe = null) {
-    const modal = document.getElementById('recipeModal');
-    const form = document.getElementById('recipeForm');
-    form.reset();
-    document.getElementById('recipeId').value = '';
-    document.getElementById('recipeModalTitle').textContent = 'Add New Recipe';
-    
-    if (recipe) {
-        document.getElementById('recipeModalTitle').textContent = 'Edit Recipe';
-        document.getElementById('recipeId').value = recipe.id;
-        document.getElementById('recipeEmoji').value = recipe.emoji || '';
-        document.getElementById('recipeName').value = recipe.name || '';
-        document.getElementById('recipeDesc').value = recipe.description || '';
-        document.getElementById('recipeBadge').value = recipe.badge || '';
-        document.getElementById('recipeTime').value = recipe.time || '';
-        document.getElementById('recipeRating').value = recipe.rating || '';
-        document.getElementById('recipeQuery').value = recipe.query || '';
-    }
-    
-    modal.classList.add('active');
-}
-
-function editRecipe(recipe) { openRecipeModal(recipe); }
-
-document.getElementById('recipeForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('recipeId').value;
-    const data = {
-        emoji: document.getElementById('recipeEmoji').value || '🍽️',
-        name: document.getElementById('recipeName').value,
-        description: document.getElementById('recipeDesc').value,
-        badge: document.getElementById('recipeBadge').value,
-        time: document.getElementById('recipeTime').value,
-        rating: document.getElementById('recipeRating').value,
-        query: document.getElementById('recipeQuery').value
-    };
-    
-    let result;
-    if (id) {
-        result = await supabase.from('recipes').update(data).eq('id', id);
-    } else {
-        result = await supabase.from('recipes').insert([data]);
-    }
-    
-    if (result.error) {
-        alert('❌ Error: ' + result.error.message);
-        return;
-    }
-    
-    closeModal('recipeModal');
-    await loadRecipes();
-    await loadStats();
-});
-
-async function deleteRecipe(id, name) {
-    if (!confirm(`Delete recipe "${name}"?`)) return;
-    const { error } = await supabase.from('recipes').delete().eq('id', id);
-    if (error) { alert('❌ Error: ' + error.message); return; }
-    await loadRecipes();
-    await loadStats();
-}
-
-// ===== PLAYLISTS =====
-async function loadPlaylists() {
-    const { data, error } = await supabase.from('playlists').select('*').order('sort_order', { ascending: true });
-    const container = document.getElementById('playlistsTable');
-    
-    if (error || !data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>No playlists yet. Click "Add Playlist" to start!</p></div>';
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Emoji</th>
-                    <th>Name</th>
-                    <th>Badge</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${data.map(p => `
-                    <tr>
-                        <td style="font-size:1.5rem;">${p.emoji || '🎬'}</td>
-                        <td><strong>${p.name}</strong></td>
-                        <td>${p.badge || '-'}</td>
-                        <td>
-                            <div class="action-btns">
-                                <button class="action-btn edit-btn" onclick='editPlaylist(${JSON.stringify(p).replace(/'/g, "&#39;")})'>✏️ Edit</button>
-                                <button class="action-btn delete-btn" onclick="deletePlaylist(${p.id}, '${p.name.replace(/'/g, "\\'")}')">🗑️ Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-function openPlaylistModal(playlist = null) {
-    const modal = document.getElementById('playlistModal');
-    const form = document.getElementById('playlistForm');
-    form.reset();
-    document.getElementById('playlistId').value = '';
-    document.getElementById('playlistModalTitle').textContent = 'Add New Playlist';
-    
-    if (playlist) {
-        document.getElementById('playlistModalTitle').textContent = 'Edit Playlist';
-        document.getElementById('playlistId').value = playlist.id;
-        document.getElementById('playlistEmoji').value = playlist.emoji || '';
-        document.getElementById('playlistName').value = playlist.name || '';
-        document.getElementById('playlistDesc').value = playlist.description || '';
-        document.getElementById('playlistUrl').value = playlist.url || '';
-        document.getElementById('playlistBadge').value = playlist.badge || '';
-        document.getElementById('playlistCount').value = playlist.count || '';
-    }
-    
-    modal.classList.add('active');
-}
-
-function editPlaylist(playlist) { openPlaylistModal(playlist); }
-
-document.getElementById('playlistForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('playlistId').value;
-    const data = {
-        emoji: document.getElementById('playlistEmoji').value || '🎬',
-        name: document.getElementById('playlistName').value,
-        description: document.getElementById('playlistDesc').value,
-        url: document.getElementById('playlistUrl').value,
-        badge: document.getElementById('playlistBadge').value,
-        count: document.getElementById('playlistCount').value
-    };
-    
-    let result;
-    if (id) {
-        result = await supabase.from('playlists').update(data).eq('id', id);
-    } else {
-        result = await supabase.from('playlists').insert([data]);
-    }
-    
-    if (result.error) {
-        alert('❌ Error: ' + result.error.message);
-        return;
-    }
-    
-    closeModal('playlistModal');
-    await loadPlaylists();
-    await loadStats();
-});
-
-async function deletePlaylist(id, name) {
-    if (!confirm(`Delete playlist "${name}"?`)) return;
-    const { error } = await supabase.from('playlists').delete().eq('id', id);
-    if (error) { alert('❌ Error: ' + error.message); return; }
-    await loadPlaylists();
-    await loadStats();
-}
-
-// ===== SUBSCRIBERS =====
-async function loadSubscribers() {
-    const { data, error } = await supabase.from('subscribers').select('*').order('subscribed_at', { ascending: false });
-    const container = document.getElementById('subscribersTable');
-    
-    if (error || !data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="icon">📩</div><p>No subscribers yet.</p></div>';
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr><th>#</th><th>Email</th><th>Subscribed At</th></tr>
-            </thead>
-            <tbody>
-                ${data.map((s, i) => `
-                    <tr>
-                        <td>${i + 1}</td>
-                        <td>${s.email}</td>
-                        <td>${new Date(s.subscribed_at).toLocaleString()}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-// ===== SETTINGS =====
-async function loadSettings() {
-    const { data, error } = await supabase.from('settings').select('*').order('id', { ascending: true });
-    const container = document.getElementById('settingsTable');
-    
-    if (error || !data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="icon">⚙️</div><p>No settings found.</p></div>';
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr><th>Key</th><th>Value</th><th>Action</th></tr>
-            </thead>
-            <tbody>
-                ${data.map(s => `
-                    <tr>
-                        <td><strong>${s.key}</strong></td>
-                        <td>
-                            <input type="text" value="${s.value || ''}" id="setting-${s.id}" 
-                                   style="background: rgba(15,15,30,0.6); border: 1px solid rgba(255,107,53,0.3); 
-                                          border-radius: 8px; padding: 0.5rem; color: white; width: 100%; max-width: 400px;">
-                        </td>
-                        <td>
-                            <button class="action-btn edit-btn" onclick="saveSetting(${s.id})">💾 Save</button>
-                        </td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-async function saveSetting(id) {
-    const value = document.getElementById('setting-' + id).value;
-    const { error } = await supabase.from('settings').update({ value }).eq('id', id);
-    if (error) { alert('❌ Error: ' + error.message); return; }
-    alert('✅ Setting saved!');
-}
-
-// ===== MODAL CLOSE =====
-function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
-}
-
-document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('active');
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuBtn.textContent = '☰';
     });
 });
+
+// ===== SCROLL REVEAL =====
+const revealOnScroll = () => {
+    document.querySelectorAll('.reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+            el.classList.add('active');
+        }
+    });
+};
+window.addEventListener('scroll', revealOnScroll);
+
+// ===== NAVBAR SCROLL =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        navbar.style.padding = '0.6rem 5%';
+        navbar.style.boxShadow = '0 5px 20px rgba(0,0,0,0.3)';
+    } else {
+        navbar.style.padding = '0.8rem 5%';
+        navbar.style.boxShadow = 'none';
+    }
+});
+
+// ===== INIT =====
+renderPlaylists();
+renderRecipes();
+revealOnScroll();
 </script>
 
 </body>

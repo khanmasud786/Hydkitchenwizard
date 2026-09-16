@@ -199,7 +199,7 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
     border-radius: 24px;
     padding: 2rem;
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     border: 1px solid rgba(255, 107, 53, 0.3);
     max-height: 90vh;
     overflow-y: auto;
@@ -222,15 +222,100 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 
 .form-group { margin-bottom: 1.2rem; }
 .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: #c8c8d8; font-weight: 500; }
-.form-group input {
+.form-group input, .form-group textarea, .form-group select {
     width: 100%; padding: 0.9rem 1.2rem;
     background: rgba(15, 15, 30, 0.6);
     border: 1px solid rgba(255, 107, 53, 0.3);
     border-radius: 12px; color: #f8f9fa;
     font-size: 1rem; outline: none;
     font-family: inherit;
+    resize: vertical;
 }
-.form-group input:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 107, 53, 0.3); }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
+    border-color: var(--primary); 
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.3); 
+}
+
+/* Image Upload Styles */
+.image-preview {
+    width: 100%;
+    height: 200px;
+    background: rgba(15, 15, 30, 0.6);
+    border: 2px dashed rgba(255, 107, 53, 0.4);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.image-preview.has-image {
+    border-color: var(--primary);
+    border-style: solid;
+}
+.image-upload-area {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.image-upload-area input[type="file"] {
+    display: none;
+}
+.upload-btn {
+    padding: 0.7rem 1.2rem;
+    background: rgba(23, 162, 184, 0.2);
+    color: var(--info);
+    border: 1px solid rgba(23, 162, 184, 0.4);
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.upload-btn:hover { background: var(--info); color: white; }
+.upload-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.url-input-wrapper {
+    position: relative;
+}
+.url-input-wrapper input {
+    padding-right: 3rem;
+}
+.url-clear {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(220, 53, 69, 0.3);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: none;
+}
+.url-input-wrapper.has-value .url-clear { display: block; }
+
+.helper-text {
+    font-size: 0.8rem;
+    color: #8b8ba7;
+    margin-top: 0.4rem;
+}
 
 .loading { text-align: center; padding: 3rem; color: var(--primary); }
 .spinner {
@@ -310,18 +395,42 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
     </div>
 </div>
 
+<!-- ===== RECIPE MODAL ===== -->
 <div class="modal" id="recipeModal">
     <div class="modal-content">
         <h3 id="recipeModalTitle">Add New Recipe</h3>
         <form id="recipeForm">
             <input type="hidden" id="recipeId">
-            <div class="form-group"><label>Emoji</label><input type="text" id="recipeEmoji" placeholder="🍛" maxlength="5"></div>
+            
+            <!-- IMAGE UPLOAD SECTION -->
+            <div class="form-group">
+                <label>🖼️ Recipe Image</label>
+                <div class="image-preview" id="recipeImagePreview">📷</div>
+                <div class="image-upload-area">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('recipeImageFile').click()">
+                        📤 Upload Image
+                    </button>
+                    <input type="file" id="recipeImageFile" accept="image/*" onchange="uploadRecipeImage(event)">
+                </div>
+                <div class="form-group" style="margin-top:0.8rem;">
+                    <label style="font-size:0.85rem;">Ya Image URL paste karein:</label>
+                    <div class="url-input-wrapper" id="recipeUrlWrapper">
+                        <input type="url" id="recipeImageUrl" placeholder="https://example.com/image.jpg" oninput="updateRecipePreview()">
+                        <button type="button" class="url-clear" onclick="clearRecipeImage()">✕</button>
+                    </div>
+                    <div class="helper-text">💡 ImgBB, Imgur ya kisi bhi image hosting ka direct link</div>
+                </div>
+            </div>
+            
+            <!-- CONTENT FIELDS -->
+            <div class="form-group"><label>Emoji (agar image nahi hai)</label><input type="text" id="recipeEmoji" placeholder="🍛" maxlength="5"></div>
             <div class="form-group"><label>Recipe Name *</label><input type="text" id="recipeName" placeholder="Hyderabadi Biryani" required></div>
-            <div class="form-group"><label>Description</label><input type="text" id="recipeDesc" placeholder="Short description"></div>
+            <div class="form-group"><label>Description</label><textarea id="recipeDesc" placeholder="Short description" rows="3"></textarea></div>
             <div class="form-group"><label>Badge</label><input type="text" id="recipeBadge" placeholder="🔥 Trending"></div>
             <div class="form-group"><label>Time</label><input type="text" id="recipeTime" placeholder="60 min"></div>
             <div class="form-group"><label>Rating</label><input type="text" id="recipeRating" placeholder="4.9"></div>
             <div class="form-group"><label>YouTube Search Query *</label><input type="text" id="recipeQuery" placeholder="hyderabadi chicken biryani" required></div>
+            
             <div class="modal-btns">
                 <button type="button" class="btn btn-cancel" onclick="closeModal('recipeModal')">Cancel</button>
                 <button type="submit" class="btn btn-save">💾 Save</button>
@@ -330,17 +439,41 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
     </div>
 </div>
 
+<!-- ===== PLAYLIST MODAL ===== -->
 <div class="modal" id="playlistModal">
     <div class="modal-content">
         <h3 id="playlistModalTitle">Add New Playlist</h3>
         <form id="playlistForm">
             <input type="hidden" id="playlistId">
-            <div class="form-group"><label>Emoji</label><input type="text" id="playlistEmoji" placeholder="🍛" maxlength="5"></div>
+            
+            <!-- IMAGE UPLOAD SECTION -->
+            <div class="form-group">
+                <label>🖼️ Playlist Image</label>
+                <div class="image-preview" id="playlistImagePreview">📷</div>
+                <div class="image-upload-area">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('playlistImageFile').click()">
+                        📤 Upload Image
+                    </button>
+                    <input type="file" id="playlistImageFile" accept="image/*" onchange="uploadPlaylistImage(event)">
+                </div>
+                <div class="form-group" style="margin-top:0.8rem;">
+                    <label style="font-size:0.85rem;">Ya Image URL paste karein:</label>
+                    <div class="url-input-wrapper" id="playlistUrlWrapper">
+                        <input type="url" id="playlistImageUrl" placeholder="https://example.com/image.jpg" oninput="updatePlaylistPreview()">
+                        <button type="button" class="url-clear" onclick="clearPlaylistImage()">✕</button>
+                    </div>
+                    <div class="helper-text">💡 ImgBB, Imgur ya kisi bhi image hosting ka direct link</div>
+                </div>
+            </div>
+            
+            <!-- CONTENT FIELDS -->
+            <div class="form-group"><label>Emoji (agar image nahi hai)</label><input type="text" id="playlistEmoji" placeholder="🎬" maxlength="5"></div>
             <div class="form-group"><label>Playlist Name *</label><input type="text" id="playlistName" placeholder="Biryani Recipes" required></div>
-            <div class="form-group"><label>Description</label><input type="text" id="playlistDesc" placeholder="Short description"></div>
+            <div class="form-group"><label>Description</label><textarea id="playlistDesc" placeholder="Short description" rows="3"></textarea></div>
             <div class="form-group"><label>YouTube Playlist URL *</label><input type="url" id="playlistUrl" placeholder="https://youtube.com/playlist?list=..." required></div>
             <div class="form-group"><label>Badge</label><input type="text" id="playlistBadge" placeholder="🍛 Biryani"></div>
             <div class="form-group"><label>Count Label</label><input type="text" id="playlistCount" placeholder="Biryani Collection"></div>
+            
             <div class="modal-btns">
                 <button type="button" class="btn btn-cancel" onclick="closeModal('playlistModal')">Cancel</button>
                 <button type="submit" class="btn btn-save">💾 Save</button>
@@ -352,6 +485,7 @@ body { background: var(--darker); color: var(--light); min-height: 100vh; line-h
 <script>
 var SUPABASE_URL = 'https://lxqyiokavimwqkvdklnd.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
+var IMGBB_API_KEY = ''; // Yahan ImgBB API Key daalein (agar image upload chahiye)
 
 var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -397,6 +531,100 @@ async function loadStats() {
     document.getElementById('statSettings').textContent = st.count || 0;
 }
 
+// ===== IMAGE UPLOAD HELPERS =====
+async function uploadToImgBB(file, previewId, urlInputId) {
+    if (!IMGBB_API_KEY) {
+        alert('⚠️ ImgBB API Key set nahi hai. Kripya URL paste karein ya developer se API Key add karwayein.');
+        return;
+    }
+    
+    var preview = document.getElementById(previewId);
+    preview.innerHTML = '<div class="spinner"></div>';
+    
+    var formData = new FormData();
+    formData.append('image', file);
+    
+    try {
+        var res = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_API_KEY, {
+            method: 'POST',
+            body: formData
+        });
+        var data = await res.json();
+        
+        if (data.success) {
+            var url = data.data.url;
+            document.getElementById(urlInputId).value = url;
+            preview.innerHTML = '<img src="' + url + '" alt="Preview">';
+            preview.classList.add('has-image');
+            document.getElementById(urlInputId).parentElement.classList.add('has-value');
+            alert('✅ Image upload ho gayi!');
+        } else {
+            throw new Error('Upload failed');
+        }
+    } catch(e) {
+        preview.innerHTML = '📷';
+        preview.classList.remove('has-image');
+        alert('❌ Image upload fail: ' + e.message);
+    }
+}
+
+function uploadRecipeImage(e) {
+    var file = e.target.files[0];
+    if (file) uploadToImgBB(file, 'recipeImagePreview', 'recipeImageUrl');
+}
+
+function uploadPlaylistImage(e) {
+    var file = e.target.files[0];
+    if (file) uploadToImgBB(file, 'playlistImagePreview', 'playlistImageUrl');
+}
+
+function updateRecipePreview() {
+    var url = document.getElementById('recipeImageUrl').value.trim();
+    var preview = document.getElementById('recipeImagePreview');
+    var wrapper = document.getElementById('recipeUrlWrapper');
+    
+    if (url) {
+        preview.innerHTML = '<img src="' + url + '" alt="Preview" onerror="this.parentElement.innerHTML=\'❌ Image load nahi hui\'">';
+        preview.classList.add('has-image');
+        wrapper.classList.add('has-value');
+    } else {
+        preview.innerHTML = '📷';
+        preview.classList.remove('has-image');
+        wrapper.classList.remove('has-value');
+    }
+}
+
+function updatePlaylistPreview() {
+    var url = document.getElementById('playlistImageUrl').value.trim();
+    var preview = document.getElementById('playlistImagePreview');
+    var wrapper = document.getElementById('playlistUrlWrapper');
+    
+    if (url) {
+        preview.innerHTML = '<img src="' + url + '" alt="Preview" onerror="this.parentElement.innerHTML=\'❌ Image load nahi hui\'">';
+        preview.classList.add('has-image');
+        wrapper.classList.add('has-value');
+    } else {
+        preview.innerHTML = '📷';
+        preview.classList.remove('has-image');
+        wrapper.classList.remove('has-value');
+    }
+}
+
+function clearRecipeImage() {
+    document.getElementById('recipeImageUrl').value = '';
+    document.getElementById('recipeImagePreview').innerHTML = '📷';
+    document.getElementById('recipeImagePreview').classList.remove('has-image');
+    document.getElementById('recipeUrlWrapper').classList.remove('has-value');
+}
+
+function clearPlaylistImage() {
+    document.getElementById('playlistImageUrl').value = '';
+    document.getElementById('playlistImagePreview').innerHTML = '📷';
+    document.getElementById('playlistImagePreview').classList.remove('has-image');
+    document.getElementById('playlistUrlWrapper').classList.remove('has-value');
+}
+
+// ===== RECIPES =====
 async function loadRecipes() {
     var result = await supabaseClient.from('recipes').select('*').order('sort_order', { ascending: true });
     var container = document.getElementById('recipesTable');
@@ -407,10 +635,14 @@ async function loadRecipes() {
         return;
     }
     
-    var html = '<table><thead><tr><th>Emoji</th><th>Name</th><th>Badge</th><th>Time</th><th>Rating</th><th>Actions</th></tr></thead><tbody>';
+    var html = '<table><thead><tr><th>Image</th><th>Name</th><th>Badge</th><th>Time</th><th>Rating</th><th>Actions</th></tr></thead><tbody>';
     data.forEach(function(r) {
         html += '<tr>';
-        html += '<td style="font-size:1.5rem;">' + (r.emoji || '🍽️') + '</td>';
+        if (r.image_url) {
+            html += '<td><img src="' + r.image_url + '" style="width:50px;height:50px;object-fit:cover;border-radius:8px;" onerror="this.style.display=\'none\'"></td>';
+        } else {
+            html += '<td style="font-size:1.5rem;">' + (r.emoji || '🍽️') + '</td>';
+        }
         html += '<td><strong>' + r.name + '</strong></td>';
         html += '<td>' + (r.badge || '-') + '</td>';
         html += '<td>' + (r.time || '-') + '</td>';
@@ -435,6 +667,7 @@ function openRecipeModal(recipe) {
     document.getElementById('recipeForm').reset();
     document.getElementById('recipeId').value = '';
     document.getElementById('recipeModalTitle').textContent = 'Add New Recipe';
+    clearRecipeImage();
     
     if (recipe) {
         document.getElementById('recipeModalTitle').textContent = 'Edit Recipe';
@@ -446,6 +679,11 @@ function openRecipeModal(recipe) {
         document.getElementById('recipeTime').value = recipe.time || '';
         document.getElementById('recipeRating').value = recipe.rating || '';
         document.getElementById('recipeQuery').value = recipe.query || '';
+        
+        if (recipe.image_url) {
+            document.getElementById('recipeImageUrl').value = recipe.image_url;
+            updateRecipePreview();
+        }
     }
     modal.classList.add('active');
 }
@@ -460,7 +698,8 @@ document.getElementById('recipeForm').addEventListener('submit', async function(
         badge: document.getElementById('recipeBadge').value,
         time: document.getElementById('recipeTime').value,
         rating: document.getElementById('recipeRating').value,
-        query: document.getElementById('recipeQuery').value
+        query: document.getElementById('recipeQuery').value,
+        image_url: document.getElementById('recipeImageUrl').value
     };
     var result;
     if (id) {
@@ -482,6 +721,7 @@ async function deleteRecipe(id) {
     await loadStats();
 }
 
+// ===== PLAYLISTS =====
 async function loadPlaylists() {
     var result = await supabaseClient.from('playlists').select('*').order('sort_order', { ascending: true });
     var container = document.getElementById('playlistsTable');
@@ -492,10 +732,14 @@ async function loadPlaylists() {
         return;
     }
     
-    var html = '<table><thead><tr><th>Emoji</th><th>Name</th><th>Badge</th><th>Actions</th></tr></thead><tbody>';
+    var html = '<table><thead><tr><th>Image</th><th>Name</th><th>Badge</th><th>Actions</th></tr></thead><tbody>';
     data.forEach(function(p) {
         html += '<tr>';
-        html += '<td style="font-size:1.5rem;">' + (p.emoji || '🎬') + '</td>';
+        if (p.image_url) {
+            html += '<td><img src="' + p.image_url + '" style="width:50px;height:50px;object-fit:cover;border-radius:8px;" onerror="this.style.display=\'none\'"></td>';
+        } else {
+            html += '<td style="font-size:1.5rem;">' + (p.emoji || '🎬') + '</td>';
+        }
         html += '<td><strong>' + p.name + '</strong></td>';
         html += '<td>' + (p.badge || '-') + '</td>';
         html += '<td><div class="action-btns">';
@@ -518,6 +762,7 @@ function openPlaylistModal(playlist) {
     document.getElementById('playlistForm').reset();
     document.getElementById('playlistId').value = '';
     document.getElementById('playlistModalTitle').textContent = 'Add New Playlist';
+    clearPlaylistImage();
     
     if (playlist) {
         document.getElementById('playlistModalTitle').textContent = 'Edit Playlist';
@@ -528,6 +773,11 @@ function openPlaylistModal(playlist) {
         document.getElementById('playlistUrl').value = playlist.url || '';
         document.getElementById('playlistBadge').value = playlist.badge || '';
         document.getElementById('playlistCount').value = playlist.count || '';
+        
+        if (playlist.image_url) {
+            document.getElementById('playlistImageUrl').value = playlist.image_url;
+            updatePlaylistPreview();
+        }
     }
     modal.classList.add('active');
 }
@@ -541,7 +791,8 @@ document.getElementById('playlistForm').addEventListener('submit', async functio
         description: document.getElementById('playlistDesc').value,
         url: document.getElementById('playlistUrl').value,
         badge: document.getElementById('playlistBadge').value,
-        count: document.getElementById('playlistCount').value
+        count: document.getElementById('playlistCount').value,
+        image_url: document.getElementById('playlistImageUrl').value
     };
     var result;
     if (id) {
@@ -563,6 +814,7 @@ async function deletePlaylist(id) {
     await loadStats();
 }
 
+// ===== SUBSCRIBERS =====
 async function loadSubscribers() {
     var result = await supabaseClient.from('subscribers').select('*').order('subscribed_at', { ascending: false });
     var container = document.getElementById('subscribersTable');
@@ -581,6 +833,7 @@ async function loadSubscribers() {
     container.innerHTML = html;
 }
 
+// ===== SETTINGS =====
 async function loadSettings() {
     var result = await supabaseClient.from('settings').select('*').order('id', { ascending: true });
     var container = document.getElementById('settingsTable');

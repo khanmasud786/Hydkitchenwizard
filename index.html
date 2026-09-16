@@ -3,8 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hyd's Kitchen Wizards - Asli Hyderabadi Recipes</title>
-<meta name="description" content="Hyd's Kitchen Wizards - Asli Hyderabadi aur Indian recipes, cooking tips aur YouTube channel">
+<title>Hyd's Kitchen Wizards - Asli Hyderabadi Recipes | Biryani, Haleem, Kebabs</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Hyd's Kitchen Wizards - Authentic Hyderabadi aur Indian recipes. Biryani, haleem, kebabs aur bahut kuch! Free recipes, cooking tips aur video tutorials.">
+<meta name="keywords" content="Hyderabadi recipes, biryani recipe, haleem recipe, Indian recipes, cooking tips, Hyderabadi food, kitchen wizard, mutton recipes, chicken recipes, iftar recipes, Hyderabadi biryani">
+<meta name="author" content="Hyd's Kitchen Wizards">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Facebook, WhatsApp) -->
+<meta property="og:title" content="Hyd's Kitchen Wizards - Asli Hyderabadi Recipes">
+<meta property="og:description" content="Authentic Hyderabadi aur Indian recipes - biryani, haleem, kebabs aur bahut kuch!">
+<meta property="og:image" content="https://i.ibb.co/FbBXncPs/1000044382.jpg">
+<meta property="og:url" content="https://hydkitchenwizard.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hyd's Kitchen Wizards">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hyd's Kitchen Wizards - Asli Hyderabadi Recipes">
+<meta name="twitter:description" content="Authentic Hyderabadi aur Indian recipes!">
+<meta name="twitter:image" content="https://i.ibb.co/FbBXncPs/1000044382.jpg">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://hydkitchenwizard.vercel.app/">
+
+<!-- Favicon -->
+<link rel="icon" type="image/jpeg" href="https://i.ibb.co/FbBXncPs/1000044382.jpg">
+
+<!-- Structured Data (Google Rich Results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Hyd's Kitchen Wizards",
+  "url": "https://hydkitchenwizard.vercel.app/",
+  "description": "Authentic Hyderabadi aur Indian recipes, cooking tips aur YouTube channel",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://hydkitchenwizard.vercel.app/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Hyd's Kitchen Wizards",
+  "url": "https://hydkitchenwizard.vercel.app/",
+  "logo": "https://i.ibb.co/FbBXncPs/1000044382.jpg",
+  "sameAs": [
+    "https://youtube.com/@hyds-kitchenwizards-v6u",
+    "https://www.instagram.com/_hyd.kitchen_wizard"
+  ]
+}
+</script>
+
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; }
 
@@ -665,13 +720,10 @@ async function loadPlaylists() {
         result.data.forEach(function(p) {
             html += '<a href="' + p.url + '" target="_blank" class="playlist-card reveal">';
             html += '<div class="playlist-thumb">';
-            
-            // Image check
             if (p.image_url) {
                 html += '<img src="' + p.image_url + '" alt="' + p.name + '" onerror="this.style.display=\'none\'">';
             }
             html += '<span class="emoji-fallback">' + (p.emoji || '🎬') + '</span>';
-            
             html += '<span class="playlist-count">📺 ' + (p.count || 'Videos') + '</span>';
             html += '<div class="playlist-overlay"><div class="playlist-play-icon">▶</div></div>';
             html += '</div>';
@@ -704,13 +756,10 @@ async function loadRecipes() {
             var searchUrl = CHANNEL_URL + '/search?query=' + encodeURIComponent(r.query || r.name);
             html += '<div class="recipe-card reveal">';
             html += '<div class="recipe-image">';
-            
-            // Image check
             if (r.image_url) {
                 html += '<img src="' + r.image_url + '" alt="' + r.name + '" onerror="this.style.display=\'none\'">';
             }
             html += '<span class="emoji-fallback">' + (r.emoji || '🍽️') + '</span>';
-            
             html += '<span class="recipe-badge">' + (r.badge || '✨ New') + '</span>';
             html += '</div>';
             html += '<div class="recipe-info">';

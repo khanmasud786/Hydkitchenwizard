@@ -18,6 +18,8 @@
     --gradient: linear-gradient(135deg, #ff6b35 0%, #f7c548 100%);
     --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     --yt-red: #ff0000;
+    --insta-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    --bg-image: url('https://i.ibb.co/qLP0XrHb/Screenshot-20260912-205901-Google.jpg');
 }
 
 html { scroll-behavior: smooth; }
@@ -26,10 +28,10 @@ body { background: var(--darker); color: var(--light); overflow-x: hidden; line-
 /* ===== NAVBAR ===== */
 nav {
     position: fixed; top: 0; width: 100%; padding: 0.8rem 5%;
-    background: rgba(15, 15, 30, 0.9);
+    background: rgba(8, 8, 18, 0.95);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     z-index: 1000; display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid rgba(255, 107, 53, 0.2); transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255, 107, 53, 0.25); transition: all 0.3s ease;
 }
 .logo {
     font-size: 1.3rem; font-weight: 800;
@@ -57,8 +59,11 @@ nav {
 .hero {
     min-height: 100vh; display: flex; align-items: center; justify-content: center;
     padding: 8rem 5% 4rem; position: relative; overflow: hidden;
-    background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(247, 197, 72, 0.15) 0%, transparent 50%);
+    background: linear-gradient(rgba(5, 5, 15, 0.94), rgba(5, 5, 15, 0.97)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 .hero-content { max-width: 1200px; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; z-index: 1; }
 .hero-text h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; }
@@ -66,7 +71,7 @@ nav {
     background: var(--gradient); -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; background-clip: text;
 }
-.hero-text p { font-size: 1.1rem; color: #b8b8d1; margin-bottom: 2rem; max-width: 520px; }
+.hero-text p { font-size: 1.1rem; color: #d8d8e8; margin-bottom: 2rem; max-width: 520px; }
 .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
 .btn {
     padding: 0.9rem 2rem; border-radius: 50px; font-weight: 600; font-size: 1rem;
@@ -75,8 +80,15 @@ nav {
 }
 .btn-primary { background: var(--gradient); color: white; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6); }
-.btn-outline { background: transparent; color: var(--light); border: 2px solid var(--primary); }
-.btn-outline:hover { background: var(--primary); transform: translateY(-3px); }
+.btn-insta {
+    background: var(--insta-gradient);
+    color: white;
+    box-shadow: 0 10px 30px rgba(220, 39, 67, 0.4);
+}
+.btn-insta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(220, 39, 67, 0.6);
+}
 
 .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
 .chef-plate {
@@ -87,46 +99,65 @@ nav {
 .chef-logo-img {
     width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
     box-shadow: 0 0 80px rgba(255, 107, 53, 0.6);
-    border: 4px solid rgba(255, 107, 53, 0.3); background: white;
+    border: 4px solid rgba(255, 107, 53, 0.5); background: white;
 }
 .chef-plate::before {
     content: ''; position: absolute; inset: -25px; border-radius: 50%;
-    border: 2px dashed rgba(255, 107, 53, 0.5); animation: rotate 20s linear infinite;
+    border: 2px dashed rgba(255, 107, 53, 0.6); animation: rotate 20s linear infinite;
 }
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* ===== SECTIONS ===== */
-section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
+section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; position: relative; }
 .section-title { text-align: center; margin-bottom: 3rem; }
 .section-title h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 1rem; }
 .section-title h2 span {
     background: var(--gradient); -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; background-clip: text;
 }
-.section-title p { color: #b8b8d1; font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+.section-title p { color: #c8c8d8; font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
 
-/* ===== PLAYLIST ===== */
+/* ===== PLAYLISTS ===== */
+#playlists {
+    max-width: none;
+    background: linear-gradient(rgba(5, 5, 15, 0.96), rgba(5, 5, 15, 0.98)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+#playlists > * { max-width: 1400px; margin-left: auto; margin-right: auto; }
+
 .playlists-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
 .playlist-card {
     background: linear-gradient(145deg, #1e1e3a, #16162c);
     border-radius: 20px; overflow: hidden; transition: all 0.4s ease;
-    border: 1px solid rgba(255, 107, 53, 0.15);
+    border: 1px solid rgba(255, 107, 53, 0.2);
     text-decoration: none; color: var(--light);
     display: flex; flex-direction: column; position: relative;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 .playlist-card:hover {
     transform: translateY(-10px); border-color: var(--primary);
-    box-shadow: 0 25px 50px rgba(255, 107, 53, 0.35);
+    box-shadow: 0 25px 50px rgba(255, 107, 53, 0.5);
 }
 .playlist-thumb {
     height: 180px; background: var(--gradient);
     display: flex; align-items: center; justify-content: center;
     font-size: 5rem; position: relative; overflow: hidden;
 }
+.playlist-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    position: absolute; inset: 0;
+}
 .playlist-thumb::after {
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 30, 0.9) 100%);
+    z-index: 1;
+}
+.playlist-thumb .emoji-fallback {
+    position: relative; z-index: 2;
 }
 .playlist-overlay {
     position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4);
@@ -144,7 +175,7 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
 .playlist-card:hover .playlist-play-icon { transform: scale(1); }
 .playlist-count {
     position: absolute; bottom: 1rem; right: 1rem;
-    background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
     padding: 0.35rem 0.9rem; border-radius: 50px;
     font-size: 0.78rem; font-weight: 600; z-index: 4;
 }
@@ -153,37 +184,56 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
 .playlist-info p { color: #b8b8d1; font-size: 0.9rem; margin-bottom: 1rem; flex: 1; }
 .playlist-badge {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    background: rgba(255, 107, 53, 0.15); color: var(--primary);
+    background: rgba(255, 107, 53, 0.2); color: var(--primary);
     padding: 0.3rem 0.8rem; border-radius: 50px;
     font-size: 0.78rem; font-weight: 600; width: fit-content;
 }
 
 /* ===== RECIPES ===== */
+#recipes {
+    max-width: none;
+    background: linear-gradient(rgba(5, 5, 15, 0.96), rgba(5, 5, 15, 0.98)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+#recipes > * { max-width: 1400px; margin-left: auto; margin-right: auto; }
+
 .recipes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
 .recipe-card {
     background: linear-gradient(145deg, #1e1e3a, #16162c);
     border-radius: 20px; overflow: hidden; transition: all 0.4s ease;
-    border: 1px solid rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.15);
     display: flex; flex-direction: column;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 .recipe-card:hover {
     transform: translateY(-10px); border-color: var(--primary);
-    box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 20px 40px rgba(255, 107, 53, 0.4);
 }
 .recipe-image {
-    height: 180px; background: var(--gradient);
+    height: 200px; background: var(--gradient);
     display: flex; align-items: center; justify-content: center;
     font-size: 4.5rem; position: relative; overflow: hidden;
+}
+.recipe-image img {
+    width: 100%; height: 100%; object-fit: cover;
+    position: absolute; inset: 0;
 }
 .recipe-image::after {
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 30, 0.85) 100%);
+    z-index: 1;
+}
+.recipe-image .emoji-fallback {
+    position: relative; z-index: 2;
 }
 .recipe-badge {
     position: absolute; top: 1rem; right: 1rem;
-    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(10px);
     padding: 0.4rem 1rem; border-radius: 50px;
-    font-size: 0.78rem; font-weight: 600; z-index: 2;
+    font-size: 0.78rem; font-weight: 600; z-index: 3;
 }
 .recipe-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
 .recipe-info h3 { font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700; }
@@ -206,21 +256,35 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
 }
 
 /* ===== CHANNEL PROMO ===== */
+#channel {
+    max-width: none;
+    background: linear-gradient(rgba(5, 5, 15, 0.93), rgba(5, 5, 15, 0.96)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+#channel > * { max-width: 1400px; margin-left: auto; margin-right: auto; }
+
 .channel-promo {
-    background: var(--gradient-dark); border-radius: 30px;
+    background: rgba(15, 15, 30, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 30px;
     padding: 4rem 3rem; text-align: center; position: relative;
-    overflow: hidden; margin-top: 3rem; border: 1px solid rgba(255, 107, 53, 0.2);
+    overflow: hidden; margin-top: 3rem; border: 1px solid rgba(255, 107, 53, 0.5);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7);
 }
 .channel-promo::before {
     content: ''; position: absolute; top: -50%; right: -50%;
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(255, 107, 53, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 107, 53, 0.3) 0%, transparent 70%);
     border-radius: 50%; animation: float 8s ease-in-out infinite;
 }
 .channel-promo::after {
     content: ''; position: absolute; bottom: -50%; left: -50%;
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(247, 197, 72, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(247, 197, 72, 0.3) 0%, transparent 70%);
     border-radius: 50%; animation: float 8s ease-in-out infinite reverse;
 }
 .promo-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
@@ -231,7 +295,8 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
     box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); background: white;
 }
 .promo-content h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 1rem; }
-.promo-content p { color: #b8b8d1; font-size: 1.05rem; margin-bottom: 2rem; }
+.promo-content p { color: #d8d8e8; font-size: 1.05rem; margin-bottom: 2rem; }
+.promo-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
 .yt-btn {
     background: var(--yt-red); color: white; padding: 1rem 2.5rem; border-radius: 50px;
     font-weight: 700; text-decoration: none; display: inline-flex;
@@ -239,6 +304,14 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
     transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
 }
 .yt-btn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6); }
+.insta-btn {
+    background: var(--insta-gradient);
+    color: white; padding: 1rem 2.5rem; border-radius: 50px;
+    font-weight: 700; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 0.7rem; font-size: 1.05rem;
+    transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(220, 39, 67, 0.4);
+}
+.insta-btn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(220, 39, 67, 0.6); }
 .subscriber-count { display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; }
 .stat { text-align: center; }
 .stat h3 {
@@ -246,18 +319,29 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text; font-weight: 800;
 }
-.stat p { color: var(--gray); font-size: 0.88rem; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
+.stat p { color: #c8c8d8; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
 
 /* ===== TIPS ===== */
+#tips {
+    max-width: none;
+    background: linear-gradient(rgba(5, 5, 15, 0.96), rgba(5, 5, 15, 0.98)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+#tips > * { max-width: 1400px; margin-left: auto; margin-right: auto; }
+
 .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
 .tip-card {
     background: linear-gradient(145deg, #1e1e3a, #16162c);
     padding: 2rem; border-radius: 20px; text-align: center;
-    transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 .tip-card:hover {
     transform: translateY(-5px); border-color: var(--secondary);
-    box-shadow: 0 15px 30px rgba(247, 197, 72, 0.2);
+    box-shadow: 0 15px 30px rgba(247, 197, 72, 0.3);
 }
 .tip-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
 .tip-card h3 { margin-bottom: 0.7rem; color: var(--secondary); }
@@ -265,8 +349,13 @@ section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
 
 /* ===== FOOTER ===== */
 footer {
-    background: var(--darker); padding: 3rem 5% 2rem;
-    border-top: 1px solid rgba(255, 107, 53, 0.1); margin-top: 4rem;
+    background: linear-gradient(rgba(3, 3, 10, 0.97), rgba(3, 3, 10, 0.99)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    padding: 3rem 5% 2rem;
+    border-top: 1px solid rgba(255, 107, 53, 0.25); margin-top: 4rem;
 }
 .footer-content {
     max-width: 1400px; margin: 0 auto;
@@ -285,21 +374,67 @@ footer {
 .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
 .social-links a {
     width: 40px; height: 40px; border-radius: 50%;
-    background: rgba(255, 107, 53, 0.1);
+    background: rgba(255, 107, 53, 0.25);
     display: flex; align-items: center; justify-content: center;
     color: var(--light); text-decoration: none;
     transition: all 0.3s ease; font-size: 1.2rem;
+    backdrop-filter: blur(5px);
 }
 .social-links a:hover { background: var(--gradient); transform: translateY(-3px); }
+.social-links a.insta-link:hover { background: var(--insta-gradient); }
 .footer-bottom {
     text-align: center; padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--gray); font-size: 0.88rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #b8b8d1; font-size: 0.88rem;
 }
 
 /* ===== ANIMATION ===== */
 .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
 .reveal.active { opacity: 1; transform: translateY(0); }
+
+/* ===== LOADING SKELETON ===== */
+.skeleton-card {
+    background: linear-gradient(145deg, #1e1e3a, #16162c);
+    border-radius: 20px;
+    height: 380px;
+    animation: pulse 1.5s ease-in-out infinite;
+    border: 1px solid rgba(255, 107, 53, 0.1);
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== NEWSLETTER ===== */
+#newsletter {
+    max-width: none;
+    background: linear-gradient(rgba(5, 5, 15, 0.96), rgba(5, 5, 15, 0.98)), var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+#newsletter > * { max-width: 1400px; margin-left: auto; margin-right: auto; }
+.newsletter {
+    text-align: center;
+    background: rgba(15, 15, 30, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 3rem 2rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 107, 53, 0.4);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7);
+}
+.newsletter h2 { font-size: 1.8rem; margin-bottom: 1rem; }
+.newsletter p { color: #d8d8e8; margin-bottom: 2rem; }
+.newsletter-form { display: flex; max-width: 500px; margin: 0 auto; gap: 0.5rem; flex-wrap: wrap; }
+.newsletter-form input {
+    flex: 1; min-width: 200px; padding: 1rem 1.5rem; border-radius: 50px;
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    background: rgba(15, 15, 30, 0.6); color: var(--light);
+    font-size: 1rem; outline: none; transition: all 0.3s ease;
+}
+.newsletter-form input:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 107, 53, 0.3); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
@@ -311,7 +446,7 @@ footer {
     .logo { font-size: 1.05rem; }
     .nav-links {
         position: fixed; top: 70px; right: -100%; flex-direction: column;
-        background: rgba(15, 15, 30, 0.98); width: 250px;
+        background: rgba(8, 8, 18, 0.99); width: 250px;
         height: calc(100vh - 70px); padding: 2rem;
         transition: right 0.4s ease; border-left: 1px solid rgba(255, 107, 53, 0.2);
     }
@@ -320,12 +455,16 @@ footer {
     .channel-promo { padding: 3rem 1.5rem; }
     .subscriber-count { gap: 1.5rem; }
     .promo-logo { width: 85px; height: 85px; }
+    .hero, #playlists, #recipes, #channel, #tips, #newsletter, footer {
+        background-attachment: scroll;
+    }
 }
 @media (max-width: 500px) {
     .hero { padding: 7rem 4% 3rem; }
     .btn { padding: 0.8rem 1.5rem; font-size: 0.95rem; }
     section { padding: 3rem 4%; }
     .chef-plate { width: 240px; height: 240px; }
+    .promo-buttons { flex-direction: column; align-items: center; }
 }
 </style>
 </head>
@@ -334,7 +473,7 @@ footer {
 <!-- ===== NAVBAR ===== -->
 <nav id="navbar">
     <div class="logo">
-        <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Hyd's Kitchen Wizards Logo" class="logo-img">
+        <img src="https://i.ibb.co/FbBXncPs/1000044382.jpg" alt="Hyd's Kitchen Wizards Logo" class="logo-img">
         <span>Hyd's Kitchen Wizards</span>
     </div>
     <ul class="nav-links" id="navLinks">
@@ -355,12 +494,12 @@ footer {
             <p>Assalamu Alaikum! Welcome to Hyd's Kitchen Wizards — aapka apna destination for authentic Hyderabadi aur Indian recipes. Sikhiye, banao aur maze karo!</p>
             <div class="hero-buttons">
                 <a href="#playlists" class="btn btn-primary">📺 Playlists Dekhein</a>
-                <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" class="btn btn-outline">▶️ Channel Dekhein</a>
+                <a href="https://www.instagram.com/_hyd.kitchen_wizard?stkn=bHY1YWFtMGlrcjR3" target="_blank" class="btn btn-insta">📷 Instagram</a>
             </div>
         </div>
         <div class="hero-visual">
             <div class="chef-plate">
-                <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Kitchen Wizard" class="chef-logo-img">
+                <img src="https://i.ibb.co/FbBXncPs/1000044382.jpg" alt="Kitchen Wizard" class="chef-logo-img">
             </div>
         </div>
     </div>
@@ -372,7 +511,11 @@ footer {
         <h2>Channel <span>Playlists</span></h2>
         <p>Category-wise saari recipes — ek click par poori playlist dekhein! 🎬</p>
     </div>
-    <div class="playlists-grid" id="playlistsGrid"></div>
+    <div class="playlists-grid" id="playlistsGrid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+    </div>
 </section>
 
 <!-- ===== RECIPES ===== -->
@@ -381,23 +524,32 @@ footer {
         <h2>Hamari <span>Famous Recipes</span></h2>
         <p>Recipe par click karein — YouTube par uski video turant khul jayegi!</p>
     </div>
-    <div class="recipes-grid" id="recipesGrid"></div>
+    <div class="recipes-grid" id="recipesGrid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+    </div>
 </section>
 
 <!-- ===== CHANNEL PROMO ===== -->
 <section id="channel">
     <div class="channel-promo reveal">
         <div class="promo-content">
-            <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Kitchen Wizard Logo" class="promo-logo">
-            <h2>🎬 Subscribe Karein Hyd's Kitchen Wizards</h2>
-            <p>Har hafte naye authentic Hyderabadi aur Indian recipe videos, cooking hacks aur kitchen wizardry tips. Hamare food lover family ka hissa baniye!</p>
-            <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" class="yt-btn">
-                ▶️ YouTube Par Subscribe Karein
-            </a>
+            <img src="https://i.ibb.co/FbBXncPs/1000044382.jpg" alt="Kitchen Wizard Logo" class="promo-logo">
+            <h2>🎬 Follow Karein Hyd's Kitchen Wizards</h2>
+            <p>YouTube aur Instagram par humein follow karein — naye recipes, tips aur cooking magic ke liye!</p>
+            <div class="promo-buttons">
+                <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" class="yt-btn">
+                    ▶️ YouTube Subscribe
+                </a>
+                <a href="https://www.instagram.com/_hyd.kitchen_wizard?stkn=bHY1YWFtMGlrcjR3" target="_blank" class="insta-btn">
+                    📷 Instagram Follow
+                </a>
+            </div>
             <div class="subscriber-count">
-                <div class="stat"><h3>2.75K+</h3><p>Subscribers</p></div>
-                <div class="stat"><h3>900+</h3><p>Videos</p></div>
-                <div class="stat"><h3>500K+</h3><p>Views</p></div>
+                <div class="stat"><h3 id="statSubs">2.75K+</h3><p>Subscribers</p></div>
+                <div class="stat"><h3 id="statVideos">900+</h3><p>Videos</p></div>
+                <div class="stat"><h3 id="statViews">500K+</h3><p>Views</p></div>
             </div>
         </div>
     </div>
@@ -433,16 +585,29 @@ footer {
     </div>
 </section>
 
+<!-- ===== NEWSLETTER ===== -->
+<section id="newsletter">
+    <div class="newsletter reveal">
+        <h2>📩 Newsletter Join Karein</h2>
+        <p>Har hafte naye recipes aur cooking tips seedhe aapke inbox mein paayein!</p>
+        <form class="newsletter-form" id="newsletterForm">
+            <input type="email" id="subscriberEmail" placeholder="Apna email daalein" required>
+            <button type="submit" class="btn btn-primary" id="subscribeBtn">Subscribe</button>
+        </form>
+        <p id="subscribeMsg" style="margin-top:1rem; display:none;"></p>
+    </div>
+</section>
+
 <!-- ===== FOOTER ===== -->
 <footer>
     <div class="footer-content">
         <div class="footer-col">
-            <img src="https://i.ibb.co/svtgBgy8/1000044382-3.jpg" alt="Hyd's Kitchen Wizards" class="footer-logo">
+            <img src="https://i.ibb.co/FbBXncPs/1000044382.jpg" alt="Hyd's Kitchen Wizards" class="footer-logo">
             <div class="logo" style="margin-bottom:1rem;font-size:1.15rem;">Hyd's Kitchen Wizards</div>
             <p style="color:#b8b8d1;font-size:0.93rem;">Authentic Hyderabadi aur Indian recipes. Cooking magic, ek recipe at a time!</p>
             <div class="social-links">
                 <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank" title="YouTube">▶️</a>
-                <a href="#" title="Instagram">📷</a>
+                <a href="https://www.instagram.com/_hyd.kitchen_wizard?stkn=bHY1YWFtMGlrcjR3" target="_blank" title="Instagram" class="insta-link">📷</a>
                 <a href="#" title="Facebook">📘</a>
             </div>
         </div>
@@ -467,8 +632,8 @@ footer {
         <div class="footer-col">
             <h4>Contact</h4>
             <ul>
-                <li><a href="#">📧 info@hydskitchenwizards.com</a></li>
-                <li><a href="#">📍 Hyderabad, India</a></li>
+                <li><a href="#" id="footerEmail">📧 info@hydskitchenwizards.com</a></li>
+                <li><a href="#" id="footerLocation">📍 Hyderabad, India</a></li>
             </ul>
         </div>
     </div>
@@ -477,110 +642,202 @@ footer {
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ===== CONFIG =====
-const CHANNEL_URL = 'https://youtube.com/@hyds-kitchenwizards-v6u';
-const SUBSCRIBE_URL = 'https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB';
+var SUPABASE_URL = 'https://lxqyiokavimwqkvdklnd.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
+var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ===== PLAYLISTS DATA (10 Total) =====
-const playlists = [
-    { emoji: '🌙', name: 'Hyderabadi Famous Iftar Recipe', desc: 'Ramzan ke liye khaas Hyderabadi iftar recipes — haleem, samosa, fruit chaat aur bahut kuch!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1GKkFoxJa_UnsUtN3g144o2&si=yar-NbnRzWemLMzj', badge: '🌙 Iftar Special', count: 'Ramzan Special' },
-    { emoji: '🍛', name: 'All Types Biryani', desc: 'Chicken, mutton, veg, egg — har tarah ki biryani ek hi jagah!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1HY72dKrliNxFGIfe174KKk&si=gLqPD3uvAFQEPvL7', badge: '🍛 Biryani', count: 'Biryani Collection' },
-    { emoji: '🥩', name: 'Mutton Recipe', desc: 'Authentic mutton recipes — korma, haleem, biryani aur bahut kuch!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1EFBIt7yY8qv3dq_OSXJS_B&si=uDkOouEZEtHc-ZaD', badge: '🥩 Mutton', count: 'Mutton Lovers' },
-    { emoji: '🪔', name: 'Diwali Special Sweet & Namkeen', desc: 'Diwali ke liye mithai aur namkeen recipes — ghar par banayein!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1GS2crAiKnL45PDazvHnwnE&si=AJwzBb9bSU-LYQTS', badge: '🪔 Diwali Special', count: 'Festival Special' },
-    { emoji: '🥪', name: 'Sandwich Recipe', desc: 'Quick aur tasty sandwich recipes — breakfast aur snacks ke liye perfect!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1G-Ys1wvNi7-AVHRd-fLYmv&si=_p6zIXATzZMIO2W-', badge: '🥪 Sandwich', count: 'Quick Recipes' },
-    { emoji: '🍳', name: 'Quick Breakfast Recipe', desc: 'Subah ke liye quick aur tasty breakfast recipes — 10 minute mein ready!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1F5CycIPR82D1SeegWMs3x8&si=QRQ840fBqz3nVf16', badge: '🍳 Breakfast', count: '39 Videos' },
-    { emoji: '🍽️', name: 'Hyderabadi Lunch/Dinner Combo', desc: 'Hyderabadi lunch aur dinner ke liye perfect combo recipes!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1FnQhdM6Jw2OaMrYH_jbTL6&si=xDJ7inCmMxnvRS9x', badge: '🍽️ Lunch/Dinner', count: 'Combo Meals' },
-    { emoji: '🍮', name: 'Dessert Recipe Hyderabadi', desc: 'Hyderabadi style desserts aur mithaiyan — ghar par banayein!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1Gi3cApnFDVl7mUYAl4TXo0&si=epeORPxdg6cPTsU3', badge: '🍮 Dessert', count: 'Sweet Treats' },
-    { emoji: '🌅', name: 'Sehri Recipe', desc: 'Sehri ke liye khaas recipes — Ramzan mein energy ke liye perfect!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1H0A8eASKfjW1IRrskc1sOp&si=KW76EDn4U0mBKQby', badge: '🌅 Sehri Special', count: 'Ramzan Sehri' },
-    { emoji: '🧅', name: 'No Onion No Ginger Breakfast', desc: 'Bina pyaaz aur adrak ke healthy breakfast recipes — sabke liye!', url: 'https://youtube.com/playlist?list=PLHtZpUbESG1G-a-XkfiERwQMt4sSYtaVY&si=Q5Ap31buBGQaseYC', badge: '🧅 No Onion/Ginger', count: 'Healthy' }
-];
+var CHANNEL_URL = 'https://youtube.com/@hyds-kitchenwizards-v6u';
 
-// ===== RECIPES DATA =====
-const recipes = [
-    { emoji: '🍛', name: 'Hyderabadi Chicken Biryani', desc: 'Asli dum biryani with aromatic spices, saffron aur tender chicken.', badge: '🔥 Trending', time: '60 min', rating: '4.9', query: 'hyderabadi chicken biryani' },
-    { emoji: '🍜', name: 'Hyderabadi Mutton Haleem', desc: 'Traditional rich aur creamy haleem — Ramzan ka khaas pakwan.', badge: '⚡ Special', time: '90 min', rating: '4.8', query: 'mutton haleem' },
-    { emoji: '🍗', name: 'Chicken 65', desc: 'Crispy, spicy aur deep-fried South Indian chicken starter.', badge: '🔥 Spicy', time: '30 min', rating: '4.9', query: 'chicken 65' },
-    { emoji: '🥘', name: 'Butter Chicken', desc: 'Creamy, rich aur delicious North Indian butter chicken recipe.', badge: '🍛 Curry', time: '45 min', rating: '4.9', query: 'butter chicken' },
-    { emoji: '🍢', name: 'Paneer Tikka', desc: 'Smoky grilled paneer with perfect blend of Indian spices.', badge: '💚 Veg', time: '30 min', rating: '4.7', query: 'paneer tikka' },
-    { emoji: '🍰', name: 'Double Ka Meetha', desc: 'Classic Hyderabadi bread pudding dessert with dry fruits aur saffron.', badge: '🍮 Sweet', time: '40 min', rating: '4.8', query: 'double ka meetha' },
-    { emoji: '🍚', name: 'Bagara Rice', desc: 'Fragrant Hyderabadi bagara rice cooked with whole spices.', badge: '🍲 Rice', time: '35 min', rating: '4.7', query: 'bagara rice' },
-    { emoji: '🥩', name: 'Mutton Korma', desc: 'Rich aur aromatic Hyderabadi mutton korma with yogurt aur spices.', badge: '🔥 Special', time: '60 min', rating: '4.8', query: 'mutton korma' },
-    { emoji: '🍤', name: 'Prawn Masala', desc: 'Spicy aur tangy prawn masala with South Indian flavors.', badge: '🍤 Seafood', time: '25 min', rating: '4.6', query: 'prawn masala' },
-    { emoji: '🫓', name: 'Hyderabadi Paratha', desc: 'Flaky, layered paratha perfect for breakfast with curry.', badge: '🌅 Breakfast', time: '20 min', rating: '4.7', query: 'hyderabadi paratha' },
-    { emoji: '🍮', name: 'Qubani Ka Meetha', desc: 'Traditional Hyderabadi apricot dessert served with cream.', badge: '🍮 Dessert', time: '30 min', rating: '4.9', query: 'qubani ka meetha' },
-    { emoji: '🍖', name: 'Chicken Tikka', desc: 'Juicy aur smoky chicken tikka marinated in yogurt aur spices.', badge: '🔥 Kabab', time: '40 min', rating: '4.8', query: 'chicken tikka' },
-];
-
-// ===== RENDER PLAYLISTS =====
-function renderPlaylists() {
-    document.getElementById('playlistsGrid').innerHTML = playlists.map(p => `
-        <a href="${p.url}" target="_blank" class="playlist-card reveal">
-            <div class="playlist-thumb">
-                ${p.emoji}
-                <span class="playlist-count">📺 ${p.count}</span>
-                <div class="playlist-overlay">
-                    <div class="playlist-play-icon">▶</div>
-                </div>
-            </div>
-            <div class="playlist-info">
-                <h3>${p.name}</h3>
-                <p>${p.desc}</p>
-                <span class="playlist-badge">${p.badge}</span>
-            </div>
-        </a>
-    `).join('');
+// ===== LOAD PLAYLISTS =====
+async function loadPlaylists() {
+    var grid = document.getElementById('playlistsGrid');
+    try {
+        var result = await supabaseClient.from('playlists').select('*').order('sort_order', { ascending: true });
+        
+        if (result.error || !result.data || result.data.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#6c757d;">🎬 No playlists available yet</div>';
+            return;
+        }
+        
+        var html = '';
+        result.data.forEach(function(p) {
+            html += '<a href="' + p.url + '" target="_blank" class="playlist-card reveal">';
+            html += '<div class="playlist-thumb">';
+            
+            // Image check
+            if (p.image_url) {
+                html += '<img src="' + p.image_url + '" alt="' + p.name + '" onerror="this.style.display=\'none\'">';
+            }
+            html += '<span class="emoji-fallback">' + (p.emoji || '🎬') + '</span>';
+            
+            html += '<span class="playlist-count">📺 ' + (p.count || 'Videos') + '</span>';
+            html += '<div class="playlist-overlay"><div class="playlist-play-icon">▶</div></div>';
+            html += '</div>';
+            html += '<div class="playlist-info">';
+            html += '<h3>' + p.name + '</h3>';
+            html += '<p>' + (p.description || '') + '</p>';
+            html += '<span class="playlist-badge">' + (p.badge || '🎬 Playlist') + '</span>';
+            html += '</div></a>';
+        });
+        grid.innerHTML = html;
+        attachReveal();
+    } catch(e) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ff6b6b;">❌ Error loading playlists</div>';
+    }
 }
 
-// ===== RENDER RECIPES =====
-function renderRecipes() {
-    document.getElementById('recipesGrid').innerHTML = recipes.map(r => `
-        <div class="recipe-card reveal">
-            <div class="recipe-image">${r.emoji}<span class="recipe-badge">${r.badge}</span></div>
-            <div class="recipe-info">
-                <h3>${r.name}</h3>
-                <p>${r.desc}</p>
-                <div class="recipe-meta">
-                    <span>⏱️ ${r.time}</span>
-                    <span>⭐ ${r.rating}</span>
-                </div>
-                <a href="${CHANNEL_URL}/search?query=${encodeURIComponent(r.query)}"
-                   target="_blank" class="watch-btn">▶ Watch Video</a>
-            </div>
-        </div>
-    `).join('');
+// ===== LOAD RECIPES =====
+async function loadRecipes() {
+    var grid = document.getElementById('recipesGrid');
+    try {
+        var result = await supabaseClient.from('recipes').select('*').order('sort_order', { ascending: true });
+        
+        if (result.error || !result.data || result.data.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#6c757d;">🍽️ No recipes available yet</div>';
+            return;
+        }
+        
+        var html = '';
+        result.data.forEach(function(r) {
+            var searchUrl = CHANNEL_URL + '/search?query=' + encodeURIComponent(r.query || r.name);
+            html += '<div class="recipe-card reveal">';
+            html += '<div class="recipe-image">';
+            
+            // Image check
+            if (r.image_url) {
+                html += '<img src="' + r.image_url + '" alt="' + r.name + '" onerror="this.style.display=\'none\'">';
+            }
+            html += '<span class="emoji-fallback">' + (r.emoji || '🍽️') + '</span>';
+            
+            html += '<span class="recipe-badge">' + (r.badge || '✨ New') + '</span>';
+            html += '</div>';
+            html += '<div class="recipe-info">';
+            html += '<h3>' + r.name + '</h3>';
+            html += '<p>' + (r.description || '') + '</p>';
+            html += '<div class="recipe-meta">';
+            html += '<span>⏱️ ' + (r.time || '30 min') + '</span>';
+            html += '<span>⭐ ' + (r.rating || '4.5') + '</span>';
+            html += '</div>';
+            html += '<a href="' + searchUrl + '" target="_blank" class="watch-btn">▶ Watch Video</a>';
+            html += '</div></div>';
+        });
+        grid.innerHTML = html;
+        attachReveal();
+    } catch(e) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ff6b6b;">❌ Error loading recipes</div>';
+    }
 }
+
+// ===== LOAD SETTINGS =====
+async function loadSettings() {
+    try {
+        var result = await supabaseClient.from('settings').select('*');
+        if (result.error || !result.data) return;
+        
+        var settings = {};
+        result.data.forEach(function(s) {
+            settings[s.key] = s.value;
+        });
+        
+        if (settings.subscriber_count) document.getElementById('statSubs').textContent = settings.subscriber_count;
+        if (settings.video_count) document.getElementById('statVideos').textContent = settings.video_count;
+        if (settings.view_count) document.getElementById('statViews').textContent = settings.view_count;
+        
+        if (settings.contact_email) {
+            var emailEl = document.getElementById('footerEmail');
+            emailEl.textContent = '📧 ' + settings.contact_email;
+            emailEl.href = 'mailto:' + settings.contact_email;
+        }
+        if (settings.location) {
+            document.getElementById('footerLocation').textContent = '📍 ' + settings.location;
+        }
+    } catch(e) {
+        console.error('Settings error:', e);
+    }
+}
+
+// ===== NEWSLETTER =====
+document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('subscribeBtn');
+    var email = document.getElementById('subscriberEmail').value.trim();
+    var msg = document.getElementById('subscribeMsg');
+    
+    if (!email) return;
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ Subscribing...';
+    msg.style.display = 'none';
+    
+    try {
+        var result = await supabaseClient.from('subscribers').insert([{ email: email }]);
+        
+        if (result.error) {
+            if (result.error.message.includes('duplicate')) {
+                msg.textContent = '⚠️ Yeh email pehle se subscribed hai!';
+                msg.style.color = '#f7c548';
+            } else {
+                msg.textContent = '❌ Error: ' + result.error.message;
+                msg.style.color = '#ff6b6b';
+            }
+            msg.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Subscribe';
+            return;
+        }
+        
+        msg.textContent = '✅ Shukriya! Aap subscribe ho gaye.';
+        msg.style.color = '#28a745';
+        msg.style.display = 'block';
+        document.getElementById('subscriberEmail').value = '';
+        btn.textContent = '✓ Subscribed!';
+        
+        setTimeout(function() {
+            btn.disabled = false;
+            btn.textContent = 'Subscribe';
+        }, 3000);
+    } catch(e) {
+        msg.textContent = '❌ Network error';
+        msg.style.color = '#ff6b6b';
+        msg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+    }
+});
 
 // ===== MOBILE MENU =====
-const menuBtn = document.getElementById('menuBtn');
-const navLinks = document.getElementById('navLinks');
-menuBtn.addEventListener('click', () => {
+var menuBtn = document.getElementById('menuBtn');
+var navLinks = document.getElementById('navLinks');
+menuBtn.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
 });
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
+document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
         navLinks.classList.remove('active');
         menuBtn.textContent = '☰';
     });
 });
 
 // ===== SCROLL REVEAL =====
-const revealOnScroll = () => {
-    document.querySelectorAll('.reveal').forEach(el => {
+function attachReveal() {
+    var reveals = document.querySelectorAll('.reveal:not(.active)');
+    reveals.forEach(function(el) {
         if (el.getBoundingClientRect().top < window.innerHeight - 100) {
             el.classList.add('active');
         }
     });
-};
-window.addEventListener('scroll', revealOnScroll);
+}
+window.addEventListener('scroll', attachReveal);
 
 // ===== NAVBAR SCROLL =====
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
+var navbar = document.getElementById('navbar');
+window.addEventListener('scroll', function() {
     if (window.scrollY > 50) {
         navbar.style.padding = '0.6rem 5%';
-        navbar.style.boxShadow = '0 5px 20px rgba(0,0,0,0.3)';
+        navbar.style.boxShadow = '0 5px 20px rgba(0,0,0,0.5)';
     } else {
         navbar.style.padding = '0.8rem 5%';
         navbar.style.boxShadow = 'none';
@@ -588,9 +845,12 @@ window.addEventListener('scroll', () => {
 });
 
 // ===== INIT =====
-renderPlaylists();
-renderRecipes();
-revealOnScroll();
+window.addEventListener('DOMContentLoaded', function() {
+    loadPlaylists();
+    loadRecipes();
+    loadSettings();
+    attachReveal();
+});
 </script>
 
 </body>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hyd's Kitchen Wizards - Asli Hyderabadi Recipes | Biryani, Haleem, Kebabs</title>
 
-<!-- ✅ GOOGLE ADSENSE CODE - YAHAN ADD KIYA GAYA HAI -->
+<!-- ✅ GOOGLE ADSENSE CODE -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3355132319863083"
      crossorigin="anonymous"></script>
 
@@ -15,7 +15,7 @@
 <meta name="author" content="Hyd's Kitchen Wizards">
 <meta name="robots" content="index, follow">
 
-<!-- Open Graph (Facebook, WhatsApp) -->
+<!-- Open Graph -->
 <meta property="og:title" content="Hyd's Kitchen Wizards - Asli Hyderabadi Recipes">
 <meta property="og:description" content="Authentic Hyderabadi aur Indian recipes - biryani, haleem, kebabs aur bahut kuch!">
 <meta property="og:image" content="https://i.ibb.co/FbBXncPs/1000044382.jpg">
@@ -29,38 +29,17 @@
 <meta name="twitter:description" content="Authentic Hyderabadi aur Indian recipes!">
 <meta name="twitter:image" content="https://i.ibb.co/FbBXncPs/1000044382.jpg">
 
-<!-- Canonical URL -->
 <link rel="canonical" href="https://hydkitchenwizard.vercel.app/">
-
-<!-- Favicon -->
 <link rel="icon" type="image/jpeg" href="https://i.ibb.co/FbBXncPs/1000044382.jpg">
 
-<!-- Structured Data (Google Rich Results) -->
+<!-- Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Hyd's Kitchen Wizards",
   "url": "https://hydkitchenwizard.vercel.app/",
-  "description": "Authentic Hyderabadi aur Indian recipes, cooking tips aur YouTube channel",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://hydkitchenwizard.vercel.app/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Hyd's Kitchen Wizards",
-  "url": "https://hydkitchenwizard.vercel.app/",
-  "logo": "https://i.ibb.co/FbBXncPs/1000044382.jpg",
-  "sameAs": [
-    "https://youtube.com/@hyds-kitchenwizards-v6u",
-    "https://www.instagram.com/_hyd.kitchen_wizard"
-  ]
+  "description": "Authentic Hyderabadi aur Indian recipes, cooking tips aur YouTube channel"
 }
 </script>
 
@@ -424,7 +403,7 @@ footer {
 .footer-col h4 { margin-bottom: 1rem; color: var(--primary); }
 .footer-col ul { list-style: none; }
 .footer-col ul li { margin-bottom: 0.5rem; }
-.footer-col ul a { color: #b8b8d1; text-decoration: none; transition: color 0.3s ease; }
+.footer-col ul a { color: #b8b8d1; text-decoration: none; transition: color 0.3s ease; cursor: pointer; }
 .footer-col ul a:hover { color: var(--primary); }
 .footer-logo {
     width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
@@ -445,6 +424,158 @@ footer {
     text-align: center; padding-top: 2rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: #b8b8d1; font-size: 0.88rem;
+}
+.footer-legal-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+.footer-legal-links a {
+    color: #b8b8d1;
+    text-decoration: none;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.footer-legal-links a:hover {
+    color: var(--primary);
+}
+
+/* ===== MODAL (Privacy, About, Contact) ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+}
+.modal-overlay.active {
+    display: flex;
+}
+.modal-box {
+    background: linear-gradient(145deg, #1a1a2e, #0f0f1e);
+    border: 1px solid rgba(255, 107, 53, 0.4);
+    border-radius: 24px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2.5rem 2rem;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+    animation: modalIn 0.35s ease;
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 107, 53, 0.2);
+    border: 1px solid rgba(255, 107, 53, 0.4);
+    color: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    line-height: 1;
+}
+.modal-close:hover {
+    background: var(--primary);
+    color: white;
+    transform: rotate(90deg);
+}
+.modal-box h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding-right: 3rem;
+}
+.modal-box h3 {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    margin: 1.5rem 0 0.6rem;
+    font-weight: 700;
+}
+.modal-box p {
+    color: #c8c8d8;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 0.8rem;
+}
+.modal-box ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 1rem;
+}
+.modal-box ul li {
+    color: #c8c8d8;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    padding-left: 1.5rem;
+    position: relative;
+}
+.modal-box ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+}
+.modal-box a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.modal-box a:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+.modal-contact-info {
+    background: rgba(255, 107, 53, 0.08);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+.modal-contact-info p {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1rem;
+}
+.modal-contact-info p:last-child {
+    margin-bottom: 0;
+}
+.modal-updated {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    color: var(--gray);
+    text-align: center;
+    font-style: italic;
 }
 
 /* ===== ANIMATION ===== */
@@ -517,6 +648,7 @@ footer {
     .hero, #playlists, #recipes, #channel, #tips, #newsletter, footer {
         background-attachment: scroll;
     }
+    .modal-box { padding: 2rem 1.3rem; }
 }
 @media (max-width: 500px) {
     .hero { padding: 7rem 4% 3rem; }
@@ -524,6 +656,7 @@ footer {
     section { padding: 3rem 4%; }
     .chef-plate { width: 240px; height: 240px; }
     .promo-buttons { flex-direction: column; align-items: center; }
+    .footer-legal-links { gap: 1rem; font-size: 0.8rem; }
 }
 </style>
 </head>
@@ -689,17 +822,169 @@ footer {
             </ul>
         </div>
         <div class="footer-col">
-            <h4>Contact</h4>
+            <h4>Company</h4>
             <ul>
-                <li><a href="#" id="footerEmail">📧 info@hydskitchenwizards.com</a></li>
-                <li><a href="#" id="footerLocation">📍 Hyderabad, India</a></li>
+                <li><a onclick="openModal('aboutModal')">About Us</a></li>
+                <li><a onclick="openModal('contactModal')">Contact Us</a></li>
+                <li><a onclick="openModal('privacyModal')">Privacy Policy</a></li>
+                <li><a onclick="openModal('contactModal')">Advertise</a></li>
             </ul>
         </div>
     </div>
     <div class="footer-bottom">
+        <div class="footer-legal-links">
+            <a onclick="openModal('aboutModal')">About Us</a>
+            <a onclick="openModal('contactModal')">Contact Us</a>
+            <a onclick="openModal('privacyModal')">Privacy Policy</a>
+        </div>
         © 2025 Hyd's Kitchen Wizards. All rights reserved. Banaya gaya ❤️ se food lovers ke liye.
     </div>
 </footer>
+
+<!-- ===== ABOUT US MODAL ===== -->
+<div class="modal-overlay" id="aboutModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('aboutModal')">✕</button>
+        <h2>About Us</h2>
+        <p>
+            <strong>Hyd's Kitchen Wizards</strong> mein aapka swagat hai! Hum ek passionate cooking channel hain jo authentic Hyderabadi aur Indian recipes ko aasaan tarike se aap tak pahunchata hai.
+        </p>
+        <p>
+            Humara maksad hai ki har ghar mein Hyderabadi swaad pahunche — chahe aap beginner ho ya experienced cook. Hamare step-by-step video tutorials, secret tips aur traditional recipes aapko kitchen ka ustad banane mein madad karte hain.
+        </p>
+        <h3>🎯 Humara Mission</h3>
+        <p>
+            Authentic Hyderabadi aur Indian cuisine ko preserve karna aur nayi generation ko sikhana — ek recipe at a time. Biryani, haleem, kebabs, aur bahut kuch — sab kuch ghar par banane ke liye aasaan tarike.
+        </p>
+        <h3>👨‍🍳 Humara Content</h3>
+        <ul>
+            <li>Authentic Hyderabadi recipes (Biryani, Haleem, Kebabs)</li>
+            <li>Iftar special recipes aur Ramadan specials</li>
+            <li>Breakfast, lunch aur dinner ideas</li>
+            <li>Cooking tips aur kitchen hacks</li>
+            <li>Step-by-step video tutorials</li>
+        </ul>
+        <h3>📺 Humse Jude Rahein</h3>
+        <p>
+            YouTube aur Instagram par humein follow karein taaki aap koi bhi nayi recipe miss na karein. Aapke suggestions aur feedback humare liye bohot important hain!
+        </p>
+        <p style="text-align:center;margin-top:1.5rem;">
+            <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank">▶️ YouTube</a> &nbsp;|&nbsp;
+            <a href="https://www.instagram.com/_hyd.kitchen_wizard?stkn=bHY1YWFtMGlrcjR3" target="_blank">📷 Instagram</a>
+        </p>
+        <div class="modal-updated">Last Updated: January 2025</div>
+    </div>
+</div>
+
+<!-- ===== CONTACT US MODAL ===== -->
+<div class="modal-overlay" id="contactModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('contactModal')">✕</button>
+        <h2>Contact Us</h2>
+        <p>
+            Koi sawaal, suggestion ya business inquiry? Humse rabta karein — hum jaldi se jawab dene ki koshish karenge!
+        </p>
+
+        <h3>📬 Contact Information</h3>
+        <div class="modal-contact-info">
+            <p>📧 <strong>Email:</strong> <a href="mailto:info@hydskitchenwizards.com">info@hydskitchenwizards.com</a></p>
+            <p>📍 <strong>Location:</strong> Hyderabad, Telangana, India</p>
+            <p>▶️ <strong>YouTube:</strong> <a href="https://youtube.com/@hyds-kitchenwizards-v6u?si=1pj7udOLEcA22slB" target="_blank">@hyds-kitchenwizards</a></p>
+            <p>📷 <strong>Instagram:</strong> <a href="https://www.instagram.com/_hyd.kitchen_wizard?stkn=bHY1YWFtMGlrcjR3" target="_blank">@_hyd.kitchen_wizard</a></p>
+        </div>
+
+        <h3>💼 Business & Collaboration</h3>
+        <p>
+            Agar aap hamare saath collaborate karna chahte hain — sponsorship, product review, ya recipe collaboration ke liye — toh email par sampark karein. Hum har genuine inquiry ka jawab dete hain.
+        </p>
+
+        <h3>⏱️ Response Time</h3>
+        <p>
+            Hum aam taur par 24-48 hours ke andar jawab dete hain. Aapke sabr ke liye shukriya!
+        </p>
+
+        <h3>📩 Newsletter</h3>
+        <p>
+            Aap hamare <a href="#newsletter" onclick="closeModal('contactModal')">newsletter</a> mein bhi subscribe kar sakte hain — naye recipes aur tips seedhe aapke inbox mein paayein!
+        </p>
+
+        <div class="modal-updated">Last Updated: January 2025</div>
+    </div>
+</div>
+
+<!-- ===== PRIVACY POLICY MODAL ===== -->
+<div class="modal-overlay" id="privacyModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('privacyModal')">✕</button>
+        <h2>Privacy Policy</h2>
+        <p>
+            Hyd's Kitchen Wizards (hydkitchenwizard.vercel.app) par aapki privacy humare liye bohot important hai. Yeh Privacy Policy batati hai ki hum kaunsi information collect karte hain, kaise use karte hain, aur aapki safety kaise karte hain.
+        </p>
+
+        <h3>1. Kaunsi Information Collect Karte Hain?</h3>
+        <ul>
+            <li><strong>Email Address:</strong> Jab aap hamare newsletter mein subscribe karte hain.</li>
+            <li><strong>Usage Data:</strong> Google Analytics ke through anonymous browsing data (pages visited, time spent, etc.)</li>
+            <li><strong>Cookies:</strong> Website experience improve karne ke liye basic cookies.</li>
+        </ul>
+
+        <h3>2. Information Kaise Use Karte Hain?</h3>
+        <ul>
+            <li>Aapko naye recipes aur updates bhejne ke liye</li>
+            <li>Website content aur user experience improve karne ke liye</li>
+            <li>Aapke sawaalon ka jawab dene ke liye</li>
+            <li>Website traffic aur performance analyze karne ke liye</li>
+        </ul>
+
+        <h3>3. Google AdSense & Third-Party Ads</h3>
+        <p>
+            Yeh website <strong>Google AdSense</strong> use karti hai. Google aapko personalized ads dikhane ke liye cookies use karta hai. Aap Google Ads Settings par jaakar personalized ads ko disable kar sakte hain.
+        </p>
+        <p>
+            Third-party vendors, including Google, aapki previous visits ke aadhar par ads dikhate hain. Google ke advertising cookies ke baare mein zyada jaankari ke liye <a href="https://policies.google.com/technologies/ads" target="_blank">Google Ads Policy</a> dekhein.
+        </p>
+
+        <h3>4. YouTube Embedded Content</h3>
+        <p>
+            Hamari website par YouTube videos embedded hain. Jab aap in videos ko dekhte hain, toh YouTube apni privacy policy ke mutabiq cookies set kar sakta hai. Zyada jaankari ke liye <a href="https://policies.google.com/privacy" target="_blank">Google Privacy Policy</a> dekhein.
+        </p>
+
+        <h3>5. Cookies</h3>
+        <p>
+            Hum cookies ka use karte hain aapke browsing experience ko behtar banane ke liye. Aap apne browser settings se cookies ko disable kar sakte hain, lekin isse kuch features kaam nahi kar sakte.
+        </p>
+
+        <h3>6. Data Security</h3>
+        <p>
+            Hum aapki personal information ko surakshit rakhne ke liye reasonable measures lete hain. Lekin internet par koi bhi transmission 100% secure nahi hoti, isliye hum complete security ki guarantee nahi de sakte.
+        </p>
+
+        <h3>7. Aapke Rights</h3>
+        <ul>
+            <li>Aap kabhi bhi newsletter unsubscribe kar sakte hain</li>
+            <li>Aap apni personal information delete karne ki request kar sakte hain</li>
+            <li>Aap humein email karke koi bhi sawaal pooch sakte hain</li>
+        </ul>
+
+        <h3>8. Children's Privacy</h3>
+        <p>
+            Hamari website 13 saal se kam umar ke bachon se jaan-boojh kar personal information collect nahi karti. Agar aapko lagta hai ki humne galti se aisi information collect ki hai, toh humein email karein.
+        </p>
+
+        <h3>9. Privacy Policy Mein Changes</h3>
+        <p>
+            Hum samay-samay par is Privacy Policy ko update kar sakte hain. Koi bhi bada change hone par hum website par notice karenge. Regular updates ke liye is page ko check karte rahein.
+        </p>
+
+        <h3>10. Contact</h3>
+        <p>
+            Privacy Policy ke baare mein koi bhi sawaal ke liye humein email karein:
+            <a href="mailto:info@hydskitchenwizards.com">info@hydskitchenwizards.com</a>
+        </p>
+
+        <div class="modal-updated">Last Updated: January 2025</div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -708,6 +993,40 @@ var SUPABASE_KEY = 'sb_publishable_ze9HeMDOxQk_8TIkoSBvqA_Q8QcWxFD';
 var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 var CHANNEL_URL = 'https://youtube.com/@hyds-kitchenwizards-v6u';
+
+// ===== MODAL FUNCTIONS =====
+function openModal(id) {
+    var modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+function closeModal(id) {
+    var modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+// Close modal when clicking outside
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+});
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(function(modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+});
 
 // ===== LOAD PLAYLISTS =====
 async function loadPlaylists() {
@@ -797,15 +1116,6 @@ async function loadSettings() {
         if (settings.subscriber_count) document.getElementById('statSubs').textContent = settings.subscriber_count;
         if (settings.video_count) document.getElementById('statVideos').textContent = settings.video_count;
         if (settings.view_count) document.getElementById('statViews').textContent = settings.view_count;
-        
-        if (settings.contact_email) {
-            var emailEl = document.getElementById('footerEmail');
-            emailEl.textContent = '📧 ' + settings.contact_email;
-            emailEl.href = 'mailto:' + settings.contact_email;
-        }
-        if (settings.location) {
-            document.getElementById('footerLocation').textContent = '📍 ' + settings.location;
-        }
     } catch(e) {
         console.error('Settings error:', e);
     }
